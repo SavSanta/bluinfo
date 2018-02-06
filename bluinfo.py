@@ -4,7 +4,7 @@ import sys                              # St&ard. Also good for platform values
 import os                                # Portability module
 import time                         # sleep calls mainly
 import iso_639_2map         # Converting language codes ISO-639-2 
-import argparse                 # For commandline parsing. ( may need to look into other solutions).
+import argparse                 # For commandline parsing. (May need to look into other solutions).
 import tkinter                   # For the GUI that some will say is undoubtedbly ugly.
 import ts_scanner as ScanTask
 from datetime import timedelta         # date and date conversions for logs
@@ -149,7 +149,7 @@ class BDROM():
         data = sorted(data)
         """
         
-        self.playlistsresults = sorted(x.playlistsresults, key=dsort, reverse=True))
+        self.playlistsresults = sorted(x.playlistsresults, key=dsort, reverse=True)
 
 
     def printBDMV(self, target=None):
