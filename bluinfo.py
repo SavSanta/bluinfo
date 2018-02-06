@@ -7,12 +7,12 @@ import iso_639_2map         # Converting language codes ISO-639-2
 import argparse                 # For commandline parsing. ( may need to look into other solutions).
 import tkinter                   # For the GUI that some will say is undoubtedbly ugly.
 import ts_scanner as ScanTask
-from datetime import timedelta                     # date and date conversions for logs
+from datetime import timedelta         # date and date conversions for logs
 
-__version__ = "0.4"
+__version__ = "0.5"
 __author__ = "SavSanta"
 
-sysplatform =  sys.platform                     # For future bug testing on Windows primarily
+sysplatform =  sys.platform     # For future bug testing on Windows
 
 class BDROM():
 
@@ -165,7 +165,6 @@ class BDROM():
             print()
             
             
-
     @staticmethod
     def listloader(dirpath, ftype):
         contents = [x for x in os.listdir(dirpath) if x.endswith(ftype.lower()) or x.endswith(ftype.upper())]        # Think about making this a generator in the future for speed improvements.
