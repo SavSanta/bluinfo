@@ -11,6 +11,7 @@ when I call them in other classes functions/methods. I tested it in IDLE and it 
 - Figure out better naming conventions
 - Change my  return None and associated checks into exception raised and handled
 - GUI design
+- Add logging module for info output
 - Think about turning the methods defined functions in the ts_streamtype classes (like convertvideformat, convertsamplerate, etc) into property (methods that computer their value when access)
 - Make program faster https://wiki.python.org/moin/PythonSpeed/PerformanceTips
 - Investigate if I can use in the MPLS laylist reader portion an actual StreamReader that remembers the last position instead of a list (as im doing with the pos variable since Python doesnt support a ref keyword).
