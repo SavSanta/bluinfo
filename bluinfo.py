@@ -134,7 +134,8 @@ class BDROM():
 
     def sortBDMV(self):
         # Find Main Title (Really it's "Guess Main Title")
-
+        
+        assert(self.playlistsresults)
         def dsort(k):
             if not x.playlistsresults[k].playlistchapters: # This logic added because there may be a bug with VC-1 video only tracks as evident in Empire Of The Sun 00010.mpls 
                 return ("0:00:00.000", 0)
@@ -149,7 +150,7 @@ class BDROM():
         data = sorted(data)
         """
         
-        self.playlistsresults = sorted(x.playlistsresults, key=dsort, reverse=True))
+        self.playlistsresults = sorted(x.playlistsresults, key=dsort, reverse=True)
 
 
     def printBDMV(self, target=None):
