@@ -142,9 +142,12 @@ class BDROM():
                 v1 = self.convertchaptersecs(timedelta(seconds=x.playlistsresults[k].playlistchapters[-1]))
                 v2 = x.playlistsresults[k].playlistchapters.__sizeof__()
             return (v1, v2)
-            
+         
+        """
+        Sort accurate so far but potential multilayer approach. with future bugs
         data = sorted(x.playlistsresults, key=dsort, reverse=True)
         data = sorted(data)
+        """
         
         print("This is the list sorted: \n\n ", sorted(x.playlistsresults, key=dsort, reverse=True))
 
