@@ -144,7 +144,7 @@ class BDROM():
             return (v1, v2)
          
         """
-        Sort accurate so far but potential multilayer approach. with future bugs
+        --Possible Alternative Sorting Implementation for Future Bugs--
         data = sorted(x.playlistsresults, key=dsort, reverse=True)
         data = sorted(data)
         """
@@ -152,9 +152,9 @@ class BDROM():
         self.playlistsresults = sorted(x.playlistsresults, key=dsort, reverse=True))
 
 
-    def printBDMV(self, file=None):
+    def printBDMV(self, target=None):
         
-        # TODO: Checking 'file' because in the future we can develop a use case where we only get info from specific files
+        # TODO: Here 'target' only in case the future we can develop a use case where we only get info from specified playlist
         
         for file, mpls in self.playlistsresults.items():
             print("PLAYLIST: ", file)
@@ -163,7 +163,8 @@ class BDROM():
             for index in range(0, len(mpls.chapterclips)):
                 print(mpls.chapterclips[index].name + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimeout)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].length)))
             print()
-           
+            
+            
 
     @staticmethod
     def listloader(dirpath, ftype):
