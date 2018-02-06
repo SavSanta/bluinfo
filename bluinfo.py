@@ -149,7 +149,7 @@ class BDROM():
         data = sorted(data)
         """
         
-        print("This is the list sorted: \n\n ", sorted(x.playlistsresults, key=dsort, reverse=True))
+        self.playlistsresults = sorted(x.playlistsresults, key=dsort, reverse=True))
 
 
     def printBDMV(self, file=None):
