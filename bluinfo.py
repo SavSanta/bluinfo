@@ -133,21 +133,25 @@ class BDROM():
         return
 
     def sortBDMV(self):
-        # Find Main Title
-
-        for k,v in self.playlistsresults.items():
-            print(k, "=== ", v.playlistchapters.__sizeof__())
+        # Find Main Title (Really it's "Guess Main Title")
 
         def dsort(k):
-            return (self.convertchaptersecs(timedelta(seconds=x.playlistsresults[k].playlistchapters[-1])), x.playlistsresults[k].playlistchapters.__sizeof__()) # returns a timedelta for the last element in playlist and the size of the playlist
-
+            if not x.playlistsresults[k].playlistchapters: # This logic added because there may be a bug with VC-1 video only tracks as evident in Empire Of The Sun 00010.mpls 
+                return ("0:00:00.000", 0)
+            else:
+                v1 = self.convertchaptersecs(timedelta(seconds=x.playlistsresults[k].playlistchapters[-1]))
+                v2 = x.playlistsresults[k].playlistchapters.__sizeof__()
+            return (v1, v2)
+            
+        data = sorted(x.playlistsresults, key=dsort, reverse=True)
+        data = sorted(data)
+        
         print("This is the list sorted: \n\n ", sorted(x.playlistsresults, key=dsort, reverse=True))
-
 
 
     def printBDMV(self, file=None):
         
-        # TODO: Checking file because in the future we can develop a use case where we only get info from specific files
+        # TODO: Checking 'file' because in the future we can develop a use case where we only get info from specific files
         
         for file, mpls in self.playlistsresults.items():
             print("PLAYLIST: ", file)
