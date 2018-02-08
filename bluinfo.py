@@ -138,20 +138,16 @@ class BDROM():
         
         assert(self.playlistsresults)
         def dsort(k):
-            if not x.playlistsresults[k].playlistchapters: # This logic added because there may be a bug with VC-1 video only tracks as evident in Empire Of The Sun 00010.mpls 
+            if not k[1].playlistchapters: # This logic added because there may be a bug with VC-1 video only tracks as evident in Empire Of The Sun 00010.mpls 
                 return ("0:00:00.000", 0)
             else:
-                v1 = self.convertchaptersecs(timedelta(seconds=x.playlistsresults[k].playlistchapters[-1]))
-                v2 = x.playlistsresults[k].playlistchapters.__sizeof__()
+                v1 = self.convertchaptersecs(timedelta(seconds=k[1].playlistchapters[-1]))
+                v2 = k[1].playlistchapters.__sizeof__()
             return (v1, v2)
          
-        """
-        --Possible Alternative Sorting Implementation for Future Bugs--
-        data = sorted(x.playlistsresults, key=dsort, reverse=True)
-        data = sorted(data)
-        """
-        
-        self.sortedplaylist = OrderedDict(sorted(x.playlistsresults.items(), key=dsort, reverse=True))
+        # Two sorts because of stable sort properties for the sequential mpls file name.
+        self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key= lambda k:k[0]))
+        self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key=dsort, reverse=True))
 
 
     def printBDMV(self, target=None):
