@@ -148,11 +148,11 @@ class TSAudioStream(Stream):
         if self.channelcount > 0:
             description += "{0:D}.{1:d}".format(self.channelcount, self.lfe)
         elif ChannelLayout.CHANNELLAYOUT_MONO:
-            description += "2.0"
-        elif ChannelLayout.CHANNELLAYOUT_STEREO:
-            description += "3.1"
-        elif ChannelLayout.CHANNELLAYOUT_MULTI:
             description += "1.0"
+        elif ChannelLayout.CHANNELLAYOUT_STEREO:
+            description += "2.0"
+        elif ChannelLayout.CHANNELLAYOUT_MULTI:
+            description += "5.1"
 
         if self.audiomode == AudioMode.Extended:
             description += "-EX"
