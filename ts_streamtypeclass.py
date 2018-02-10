@@ -10,7 +10,7 @@ class Stream(object):
         self.activebitrate = 0
         self.isVBR = False
         self.isInitialized = False
-        self.languagename = "--UNKNOWN--"                 
+        self.languagename = "Unknown"                 
         self.isHidden = False
         self.isAudio = False
         self.isVideo = False
@@ -87,6 +87,7 @@ class TSVideoStream(Stream):
             self.frame_rate_enumerator = 60000
             self.frame_rate_denominator = 1001
 
+    @property
     def desc(self):
         description = ""         
         if self.height > 0:
@@ -141,7 +142,7 @@ class TSAudioStream(Stream):
 
     def channeldesc(self):
         if ( self.channellayout == ChannelLayout.CHANNELLAYOUT_MONO and self.channelcount == 2 ):
-            pass # Mirrors { empty braces } in csharp source
+            pass
 
         description = ""
         if self.channelcount > 0:
@@ -160,9 +161,9 @@ class TSAudioStream(Stream):
 
         return description
 
-
+    @property
     def desc(self):
-        description = self.channeldesc()               # I wonder if I will need to change this to TSAudioStream.channeldesc(). However this is just to mimic the C Sharp since using accessors in Python is complicated
+        description = self.channeldesc()   # I wonder if I will need to change this to TSAudioStream.channeldesc(). However this is just to mimic the C Sharp since using accessors in Python is complicated
 
         if self.samplerate > 0:
             description += " / {0} kHz".format((self.samplerate / 1000))
@@ -177,7 +178,7 @@ class TSAudioStream(Stream):
                 description += " /Dual Mono"
             elif self.audiomode == AudioMode.Surround:
                 description += " / Dolby Surround"
-        if description.endswith(' / '): # Why the fuck is this in here I have no idea. Maybe if it somethow has to remove a stray " / " ending. Seems odd, but whatever
+        if description.endswith(' / '): # Why the heck is this in here I have no idea. Maybe if it somehow has to remove a stray " / " ending. Seems odd, but whatever
             description = description[:(description.__len__() - 3)]
         if self.corestream != None:                                                                         # Here I may need to investigate where Csharp source Corestream information actually got passed.
             corecodec = ""
@@ -197,7 +198,6 @@ class TSTextStream(Stream):
         self.isVBR = True
         self.isInitialized = True
         self.isText = True
-
 
     def __str__(self):        
         return "The ID is {}, the language code is {} (most likely references {}) and the  codec is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
@@ -228,7 +228,7 @@ class MPLS(object):
         self.chapterclips = []
         self.streamclips = []
         
-        self.playlistchapters = []  # The chapters that are already have their "relative values" calculated. What orig BDInfo puts out too.
+        self.playlistchapters = []  # The chapters here already have their "relative values" calculated. What orig BDInfo puts out too.
         
         self.streams = {}           
         self.playliststreams = {}
