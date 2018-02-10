@@ -3,7 +3,6 @@
 import sys                              # St&ard. Also good for platform values
 import os                                # Portability module
 import time                         # sleep calls mainly
-import iso_639_2map         # Converting language codes ISO-639-2 
 import argparse                 # For commandline parsing. ( may need to look into other solutions).
 import tkinter                   # For the GUI that some will say is undoubtedbly ugly.
 import ts_scanner as ScanTask

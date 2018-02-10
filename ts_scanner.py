@@ -6,6 +6,7 @@ import iso_639_2map         # Converting language codes ISO-639-2
 import ts_streamtypeclass
 from ts_attrconst import StreamType
 from os.path import basename as basename
+from iso_639_2map import isolangfunc         # Converting language codes ISO-639-2 
 
 
 
@@ -75,6 +76,7 @@ def clipfilescan(cpath,cliplists):
                     stream.channellayout = channellayout
                     stream.samplerate = stream.convertsamplerate(samplerate)
                     stream.streamtype = streamtype
+                    stream.languagename = isolangfunc(stream.languagecode)
 
  
                 elif (streamtype == StreamType.INTERACTIVE_GRAPHICS or streamtype == StreamType.PRESENTATION_GRAPHICS):
@@ -83,7 +85,8 @@ def clipfilescan(cpath,cliplists):
                     languagebytes = clipdata[(streamoffset + 2):3]
                     languagecode = languagebytes.decode("ascii")
                     stream.languagecode = languagecode
- 
+                    stream.languagename = isolangfunc(stream.languagecode)
+                    
                 
                 elif (streamtype == StreamType.SUBTITLE):
 
@@ -91,7 +94,7 @@ def clipfilescan(cpath,cliplists):
                     languagebytes = clipdata[streamoffset + 3:((streamoffset + 3) + 3)]
                     languagecode = languagebytes.decode("ascii")
                     stream.languagecode = languagecode
-                    
+                    stream.languagename = isolangfunc(stream.languagecode)
                     
                 if stream != None:
                     stream.PID = streamPID
@@ -123,7 +126,7 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
         fullpath = os.path.join(ppath, target)
         try:
             f = open(fullpath, 'rb')                                    # opening the file for BINARY reading
-            binfiledatas = bytes(f.read())                       # I believe we mirror BDINFO itselff and read the whole file into the variable. Hence why we only slice to the 8 bit in the next line.
+            binfiledatas = bytes(f.read())                       # I believe we mirror BDINFO itself and read the whole file into the variable. Hence why we only slice to the 8 bit in the next line.
             if (binfiledatas[:8] != b"MPLS0100") and (binfiledatas[:8] != b"MPLS0200") and (binfiledatas[:8] != b"MPLS0300"):   
                 raise Exception("Exception: MPLS file {} is of an unsupported playlist type {}!".format(fullpath, binfiledatas[:8]))    # Because we dont know the file type
 
