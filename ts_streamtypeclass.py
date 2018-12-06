@@ -105,7 +105,7 @@ class TSVideoStream(Stream):
             description += "2:21 / "
         if self.encoding_profile != None:                
             description += self.encoding_profile + " / "
-        if description.endswith(' / '): # Why the fuck is this in here I have no idea. Maybe if it somethow has to remove a stray " / " ending. Seems odd, but whatever
+        if description.endswith(' / '): # Why the heck is this in here I have no idea. Maybe if it somethow has to remove a stray " / " ending. Seems odd, but whatever
             description = description[:(description.__len__() - 3)]                
         return description
     

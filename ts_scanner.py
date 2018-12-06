@@ -16,7 +16,7 @@ def clipfilescan(cpath,cliplists):
         fullpath = os.path.join(cpath, target)
         try:
             f = open(fullpath, 'rb')                                    # opening the file for BINARY reading
-            binreadfile = bytes(f.read())                       # I believe we mirror BDINFO itselff and read the whole file into the variable. Hence why we only sliced to the 8th bit in the next line.
+            binreadfile = bytes(f.read())                       # I believe we mirror BDINFO itself and read the whole file into the variable. Hence why we only sliced to the 8th bit in the next line.
             if (binreadfile[:8] != b"HDMV0100") and (binreadfile[:8] != b"HDMV0200") and (binreadfile[:8] != b"HDMV0300"):   
                 raise Exception("Exception: CPLI file {} has an unknown filetype {}!".format(fullpath, binreadfile[:8]))    # Because we dont know the file type
             
