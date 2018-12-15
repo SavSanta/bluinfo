@@ -22,7 +22,7 @@ button .top.buttonScan -text Scan -command fn_iso
 pack .top.buttonBrowse .top.buttonISO  .top.buttonScan -side right -padx 2
 
 #  Create a label and textentry and pack to the left
-label .top.labelSelectSource -text {Select the BDROM Source}
+label .top.labelSelectSource -text {Select the BDROM Source:}
 entry .top.entryBDpath -bg yellow -fg green -relief sunken -width 110 
 pack .top.labelSelectSource  -side left
 pack .top.entryBDpath -side left -expand true
@@ -42,7 +42,7 @@ frame .two
 pack .two -side top -fill x 
 
 # Pack playlist  label and buttons and pack to the left in order
-label .two.label -text "Select Playlist(s)"
+label .two.label -text "Select Playlist(s):"
 button .two.buttonSelectAll -text "Select All"
 button .two.buttonSelectNone -text "Select None"
 button .two.buttonSelectCustom -text "Custom"
