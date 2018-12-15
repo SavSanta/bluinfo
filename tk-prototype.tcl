@@ -51,6 +51,18 @@ pack .two.label .two.buttonSelectAll .two.buttonSelectNone .two.buttonSelectCust
 frame .three 
 pack .three -side top -fill x -pady 1
 
+#Add TTK Treeview with no tree to the third frame.
+ttk::treeview .three.playlistbox -show {headings} -columns {Playlist "File Group" Length Size } -selectmode none -height 5
+
+# Add appropriate headings text to each column. 
+foreach i {0 1 2 3} j {Playlist "File Group" Length Size } {
+.three.playlistbox  heading $i -text $j \
+}
+
+# Pack  the playlistbox  frame and make the darn  listbox widget expand and fill the window
+pack conf .three.playlistbox -expand 1 -fill x
+
+
 # Add fourth level frame for containing streamfile listbox widgets
 frame .four
 pack .four -side top -fill x -pady 1
