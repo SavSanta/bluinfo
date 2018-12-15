@@ -17,9 +17,8 @@ pack .top -side top -fill x
 
 #Create the clickable buttons for slection and  pack to the right of the top frame
 button .top.buttonBrowse -text Browse -command fn_browse
-button .top.buttonISO -text ISO -command fn_iso
 button .top.buttonScan -text Scan -command fn_iso
-pack .top.buttonBrowse .top.buttonISO  .top.buttonScan -side right -padx 2
+pack .top.buttonBrowse  .top.buttonScan -side right -padx 2
 
 #  Create a label and textentry and pack to the left
 label .top.labelSelectSource -text {Select the BDROM Source:}
