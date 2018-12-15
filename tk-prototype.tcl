@@ -8,8 +8,11 @@ set prog_version "0.5"
 # Set Window Title
 wm title . "bluinfo.py $prog_version"
 
+# Add padding to root window
+. conf -padx 10
+
 # Create and pack a top frame
-frame .top -borderwidth 25
+frame .top -pady 10
 pack .top -side top -fill x
 
 #Create the clickable buttons for slection and  pack to the right of the top frame
