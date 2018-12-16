@@ -59,17 +59,37 @@ foreach i {0 1 2 3} j {Playlist "File Group" Length Size } {
 .three.playlistbox  heading $i -text $j \
 }
 
-# Pack  the playlistbox  frame and make the darn  listbox widget expand and fill the window
-pack conf .three.playlistbox -expand 1 -fill x
-
-
-# Add fourth level frame for containing streamfile listbox widgets
-frame .four
+# Add fourth level frame for containing stream file listbox widgets
+frame .four 
 pack .four -side top -fill x -pady 1
 
-# Add fifth level frame for containing codecs listbox widgets
-frame .five 
-pack .five -side top -fill x -pady 1
+#Add TTK Treeview with no tree to the third frame.
+ttk::treeview .four.streambox -show {headings} -columns {"Stream File" Length Size } -selectmode none -height 5
+
+# Add appropriate headings text to each column. 
+foreach i {0 1 2} j {"Stream File" Length Size } {
+.four.streambox  heading $i -text $j \
+}
+
+# Pack  the stream file listbox  frameframe with expand and fill
+pack conf .four.streambox -expand 1 -fill x
+
+# Add fourth level frame for containing playlist listbox widgets
+frame .four 
+pack .four -side top -fill x -pady 1
+
+#Add TTK Treeview with no tree to the fourth frame.
+ttk::treeview .four.languagebox -show {headings} -columns { Codec Language Bitrate  Description } -selectmode none -height 5
+
+# Add appropriate headings text to each column. 
+foreach i {0 1 2 3} j { Codec Language Bitrate  Description } {
+.four.languagebox  heading $i -text $j \
+}
+
+# Pack  the languagebox  frame with expand and fill
+pack conf .four.languagebox -expand 1 -fill x
+
+
 
 # Add sixth level frame for containing  culled  final informational textbox widget
 frame .six 
@@ -78,8 +98,6 @@ pack .six -side top -fill x
 # Add seventh level frame for containing progressbar widgets
 frame .seven
 pack .seven -side top -fill x
-
-
 
 
 
