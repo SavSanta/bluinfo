@@ -18,7 +18,7 @@ pack .top -side top -fill x
 # Create the clickable buttons for slection and  pack to the right of the top frame
 button .top.buttonBrowse -text Browse -command fn_browse
 button .top.buttonScan -text Scan -command fn_iso
-pack .top.buttonBrowse  .top.buttonScan -side right -padx 2
+pack .top.buttonScan .top.buttonBrowse  -side right -padx 2
 
 #  Create a label and textentry and pack to the left
 label .top.labelSelectSource -text {Select the BDROM Source:}
@@ -26,9 +26,14 @@ entry .top.entryBDpath -bg yellow -fg green -relief sunken -width 110
 pack .top.labelSelectSource  -side left
 pack .top.entryBDpath -side left -expand true
 
-# Live Testing
+
+##################
+#
+#  Live Testing Debug
+#
 # Add text to the Entry Path. Disable Entrypath Point. Change DisableBackground to lightblue const.
 # https://www.tcl.tk/man/tcl8.4/TkCmd/entry.htm#M16
+##################
 .top.entryBDpath conf -state disabled
 .top.entryBDpath conf -disabledbackground blue
 .top.entryBDpath conf -disabledbackground lightblue
@@ -52,14 +57,14 @@ frame .three
 pack .three -side top -fill x -pady 1
 
 # Add TTK Treeview with no tree to the third frame.
-ttk::treeview .three.playlistbox -show {headings} -columns {Playlist "File Group" Length Size } -selectmode none -height 5
+ttk::treeview .three.playlistbox -show {headings} -columns {Playlist "File Group" Length Size } -selectmode extended -height 7
 
 # Add appropriate headings text to each column. 
 foreach i {0 1 2 3} j {Playlist "File Group" Length Size } {
 .three.playlistbox  heading $i -text $j \
 }
 
-# Pack  the languagebox  frame with expand and fill
+# Pack  the langbox  frame with expand and fill
 pack conf .three.playlistbox -expand 1 -fill x
 
 
@@ -83,15 +88,15 @@ frame .five
 pack .five -side top -fill x -pady 1
 
 # Add TTK Treeview with no tree to the fifth frame.
-ttk::treeview .five.languagebox -show {headings} -columns { Codec Language Bitrate  Description } -selectmode none -height 5
+ttk::treeview .five.langbox -show {headings} -columns { Codec Language Bitrate  Description } -selectmode none -height 8
 
 # Add appropriate headings text to each column. 
 foreach i {0 1 2 3} j { Codec Language Bitrate  Description } {
-.five.languagebox  heading $i -text $j \
+.five.langbox  heading $i -text $j \
 }
 
-# Pack  the languagebox  frame with expand and fill
-pack conf .five.languagebox -expand 1 -fill x
+# Pack  the langbox  frame with expand and fill
+pack conf .five.langbox -expand 1 -fill x
 
 
 
@@ -103,5 +108,37 @@ pack .six -side top -fill x
 frame .seven
 pack .seven -side top -fill x
 
+
+
+
+
+##################
+#
+#  Live Testing Debug
+#
+#  Generating  a few Entries. Test scrolling
+##################
+.three.playlistbox children {}
+.four.streambox children {} 
+.five.langbox children {}
+
+.three.playlistbox delete [.three.playlistbox children {}]
+.four.streambox  delete [.four.streambox children {}]
+.five.langbox children delete [.five.langbox children {}]
+
+foreach i {0 1 2 3 4 5 6 7} {
+.three.playlistbox insert {} end -text FuntimeMovieTime -values [list 000$i.m2ts 0$i  1:2$i:00 4$i,542,421]
+}
+
+
+foreach i {0 1 2 3 4 5 6 7} {
+.five.langbox insert {} end -text MichelThomasin -values {French Francais "192 kbps" {PushaMan}}
+.five.langbox insert {} end -text MichelThomasin -values {German Deutsch "192 kbps" {PushaMan}} \
+}
+
+.four.streambox insert {} end -text XXXTentacion -values {English English 142 80}
+.four.streambox insert {} end -text XXXTentacion -values {English English "142 kbps" {PushaMan}}
+.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "156 kbps" {PushaMan}}
+.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "192 kbps" {PushaMan}}
 
 
