@@ -74,20 +74,20 @@ foreach i {0 1 2} j {"Stream File" Length Size } {
 # Pack  the stream file listbox  frameframe with expand and fill
 pack conf .four.streambox -expand 1 -fill x
 
-# Add fourth level frame for containing playlist listbox widgets
-frame .four 
-pack .four -side top -fill x -pady 1
+# Add fifth level frame for containing playlist listbox widgets
+frame .five 
+pack .five -side top -fill x -pady 1
 
-#Add TTK Treeview with no tree to the fourth frame.
-ttk::treeview .four.languagebox -show {headings} -columns { Codec Language Bitrate  Description } -selectmode none -height 5
+#Add TTK Treeview with no tree to the fifth frame.
+ttk::treeview .five.languagebox -show {headings} -columns { Codec Language Bitrate  Description } -selectmode none -height 5
 
 # Add appropriate headings text to each column. 
 foreach i {0 1 2 3} j { Codec Language Bitrate  Description } {
-.four.languagebox  heading $i -text $j \
+.five.languagebox  heading $i -text $j \
 }
 
 # Pack  the languagebox  frame with expand and fill
-pack conf .four.languagebox -expand 1 -fill x
+pack conf .five.languagebox -expand 1 -fill x
 
 
 
@@ -98,6 +98,8 @@ pack .six -side top -fill x
 # Add seventh level frame for containing progressbar widgets
 frame .seven
 pack .seven -side top -fill x
+
+
 
 
 
