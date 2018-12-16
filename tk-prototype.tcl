@@ -15,7 +15,7 @@ wm title . "bluinfo.py $prog_version"
 frame .top -pady 10
 pack .top -side top -fill x
 
-#Create the clickable buttons for slection and  pack to the right of the top frame
+# Create the clickable buttons for slection and  pack to the right of the top frame
 button .top.buttonBrowse -text Browse -command fn_browse
 button .top.buttonScan -text Scan -command fn_iso
 pack .top.buttonBrowse  .top.buttonScan -side right -padx 2
@@ -51,7 +51,7 @@ pack .two.label .two.buttonSelectAll .two.buttonSelectNone .two.buttonSelectCust
 frame .three 
 pack .three -side top -fill x -pady 1
 
-#Add TTK Treeview with no tree to the third frame.
+# Add TTK Treeview with no tree to the third frame.
 ttk::treeview .three.playlistbox -show {headings} -columns {Playlist "File Group" Length Size } -selectmode none -height 5
 
 # Add appropriate headings text to each column. 
@@ -59,11 +59,15 @@ foreach i {0 1 2 3} j {Playlist "File Group" Length Size } {
 .three.playlistbox  heading $i -text $j \
 }
 
+# Pack  the languagebox  frame with expand and fill
+pack conf .three.playlistbox -expand 1 -fill x
+
+
 # Add fourth level frame for containing stream file listbox widgets
 frame .four 
 pack .four -side top -fill x -pady 1
 
-#Add TTK Treeview with no tree to the third frame.
+# Add TTK Treeview with no tree to the third frame.
 ttk::treeview .four.streambox -show {headings} -columns {"Stream File" Length Size } -selectmode none -height 5
 
 # Add appropriate headings text to each column. 
@@ -78,7 +82,7 @@ pack conf .four.streambox -expand 1 -fill x
 frame .five 
 pack .five -side top -fill x -pady 1
 
-#Add TTK Treeview with no tree to the fifth frame.
+# Add TTK Treeview with no tree to the fifth frame.
 ttk::treeview .five.languagebox -show {headings} -columns { Codec Language Bitrate  Description } -selectmode none -height 5
 
 # Add appropriate headings text to each column. 
@@ -98,8 +102,6 @@ pack .six -side top -fill x
 # Add seventh level frame for containing progressbar widgets
 frame .seven
 pack .seven -side top -fill x
-
-
 
 
 
