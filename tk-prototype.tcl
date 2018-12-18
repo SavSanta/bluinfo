@@ -35,7 +35,6 @@ pack .top.entryBDpath -side left -expand true
 # https://www.tcl.tk/man/tcl8.4/TkCmd/entry.htm#M16
 ##################
 .top.entryBDpath conf -state disabled
-.top.entryBDpath conf -disabledbackground blue
 .top.entryBDpath conf -disabledbackground lightblue
 
 # Make entrypath linked to a textvariable
@@ -57,6 +56,8 @@ frame .three
 pack .three -side top -fill x -pady 1
 
 # Add TTK Treeview with no tree to the third frame.
+# May need to implement checkbox style someone made here https://github.com/RedFantom/ttkwidgets/blob/master/ttkwidgets/checkboxtreeview.py
+# Also https://groups.google.com/forum/#!topic/comp.lang.tcl/VwG4_7-1538
 ttk::treeview .three.playlistbox -show {headings} -columns {Playlist "File Group" Length Size } -selectmode extended -height 7
 
 # Add appropriate headings text to each column. 
@@ -99,6 +100,23 @@ foreach i {0 1 2 3} j { Codec Language Bitrate  Description } {
 pack conf .five.langbox -expand 1 -fill x
 
 
+# Scrollboxes added to playlist, stream, and language boxes above
+ttk::scrollbar .three.scroll  -orient vertical -command ".three.playlistbox yview"
+ttk::scrollbar .four.scroll -orient vertical -command ".four.streambox yview"
+ttk::scrollbar .five.scroll -orient vertical -command ".five.langbox yview"
+
+.three.playlistbox configure -yscrollcommand ".three.scroll set"
+.four.streambox configure -yscrollcommand ".four.scroll set"
+.five.langbox configure -yscrollcommand ".five.scroll set"
+
+pack .three.playlistbox -side left
+pack .four.streambox -side left
+pack .five.langbox -side left
+
+pack .three.scroll -side right -fill y
+pack .four.scroll -side right -fill y
+pack .five.scroll -side right -fill y
+
 
 # Add sixth level frame for containing  culled  final informational textbox widget
 frame .six 
@@ -107,6 +125,9 @@ pack .six -side top -fill x
 # Add seventh level frame for containing progressbar widgets
 frame .seven
 pack .seven -side top -fill x
+
+
+
 
 
 
@@ -124,7 +145,7 @@ pack .seven -side top -fill x
 
 .three.playlistbox delete [.three.playlistbox children {}]
 .four.streambox  delete [.four.streambox children {}]
-.five.langbox children delete [.five.langbox children {}]
+.five.langbox  delete [.five.langbox children {}]
 
 foreach i {0 1 2 3 4 5 6 7} {
 .three.playlistbox insert {} end -text FuntimeMovieTime -values [list 000$i.m2ts 0$i  1:2$i:00 4$i,542,421]
