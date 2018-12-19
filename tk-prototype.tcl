@@ -35,6 +35,7 @@ pack .top.entryBDpath -side left -expand true
 # https://www.tcl.tk/man/tcl8.4/TkCmd/entry.htm#M16
 ##################
 .top.entryBDpath conf -state disabled
+.top.entryBDpath conf -disabledbackground blue
 .top.entryBDpath conf -disabledbackground lightblue
 
 # Make entrypath linked to a textvariable
@@ -120,15 +121,23 @@ pack .five.scroll -side right -fill y
 
 # Add sixth level frame for containing  culled  final informational textbox widget
 frame .six 
-pack .six -side top -fill x
+pack .six -side top -fill x -pady 1
+
+# Add sixthleve textbox and scrollbar
+ttk::scrollbar .six.scroll  -orient vertical -command ".six.text yview"
+text .six.text -background lightblue -borderwidth 3 -state disabled -height 8  -yscrollcommand ".six.scroll set"
+
+pack .six.text -fill x -side left -fill x -expand 1
+pack .six.scroll  -fill y -side right
 
 # Add seventh level frame for containing progressbar widgets
 frame .seven
-pack .seven -side top -fill x
+pack .seven -side top -fill x -pady 1
 
+ttk::progressbar .seven.progress -orient horizontal -mode determinate -width 50
+#-variable  value  
 
-
-
+pack .seven.progress -fill x
 
 
 
@@ -137,7 +146,7 @@ pack .seven -side top -fill x
 #
 #  Live Testing Debug
 #
-#  Generating  a few Entries. Test scrolling
+#  Generating  a few Treeview listbox entries. Testing scrolling and selections
 ##################
 .three.playlistbox children {}
 .four.streambox children {} 
@@ -162,4 +171,14 @@ foreach i {0 1 2 3 4 5 6 7} {
 .four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "156 kbps" {PushaMan}}
 .four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "192 kbps" {PushaMan}}
 
+##################
+#
+#  Live Testing Debug
+#
+#  Generating Lorem Ipsum Data for textbox
+##################
 
+set lorem "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod ornare convallis. Sed sit amet nisi sem. Integer commodo tincidunt lectus ut cursus. Phasellus at sollicitudin massa. Phasellus scelerisque consequat nibh non finibus. Vestibulum dolor sapien, faucibus et finibus quis, placerat in lacus. Aliquam semper, ligula faucibus dapibus accumsan, tellus urna sagittis eros, a aliquam urna magna sed sapien. \n Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras eleifend enim sit amet neque mollis, eu dapibus felis hendrerit. Pellentesque at interdum libero, quis efficitur augue. Nam enim enim, porta eget porta sit amet, tristique non nulla. Nam ac blandit risus, vel consectetur neque. Sed in congue odio. Duis iaculis efficitur mauris, eu eleifend libero pellentesque non. Pellentesque ut justo semper, rhoncus odio vitae, commodo tortor. Nullam sed enim massa. Donec eget luctus nibh, ut venenatis nunc. Donec volutpat, dolor eget mattis congue, lacus mi commodo lacus, in accumsan massa nisi vitae odio. Quisque non tempor nulla. Fusce iaculis, magna vel ornare condimentum, orci erat mattis orci, vitae tincidunt leo felis id magna. Integer in pretium velit, ut vulputate nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur ut sem condimentum, condimentum nisi nec, facilisis velit."
+.six.text conf -state normal
+.six.text insert 1.0 $lorem
+.six.text conf -state disabled
