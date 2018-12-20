@@ -134,13 +134,13 @@ pack .six.scroll  -fill y -side right
 frame .seven
 pack .seven -side top -fill x -pady 1
 
-ttk::progressbar .seven.progress -orient horizontal -mode determinate -width 50
-#-variable  value  
-
+# Add a progressbar to the program and make sure it is about 45% full!
+ttk::progressbar .seven.progress -orient horizontal -mode determinate -width 50 -value 45 
 pack .seven.progress -fill x
 
-
-
+# Add a settings button
+button .seven.buttonSettings -text Settings -command fn_settings
+pack .seven.buttonSettings -side right
 
 ##################
 #
