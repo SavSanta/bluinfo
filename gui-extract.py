@@ -75,10 +75,6 @@ playlistbox = ttk.Treeview(three, show="headings", columns=playlist_col, selectm
 # .three.playlistbox  heading $i -text $j \
 # }
 
-# Pack  the langbox  frame with expand and fill
-playlistbox.pack(expand=TRUE, fill=X)
-
-
 # Add fourth level frame for containing stream file listbox widgets
 four = tkinter.Frame(bluapp)
 four.pack(side=TOP, fill=X, pady=1)
@@ -91,9 +87,6 @@ streambox = ttk.Treeview(four, show="headings", columns=streambox_col, selectmod
 # foreach i {0 1 2} j {"Stream File" Length Size } {
 # .four.streambox  heading $i -text $j \
 # }
-
-# Pack  the stream file listbox  frameframe with expand and fill
-streambox.pack(expand=TRUE, fill=X)
 
 # Add fifth level frame for containing playlist listbox widgets
 five = tkinter.Frame(bluapp)
@@ -109,9 +102,6 @@ langbox = ttk.Treeview(five, show="headings", columns=langbox_col, selectmode=NO
 # .five.langbox  heading $i -text $j \
 # }
 
-# Pack  the langbox  frame with expand and fill
-langbox.pack(expand=TRUE, fill=X)
-
 
 # Scrollboxes added to playlist, stream, and language boxes above
 three_scroll = ttk.Scrollbar(three, orient=VERTICAL, command=playlistbox.yview)
@@ -122,9 +112,9 @@ playlistbox.configure(yscrollcommand=three_scroll.set)
 streambox.configure(yscrollcommand=four_scroll.set)
 langbox.configure(yscrollcommand=five_scroll.set)
 
-playlistbox.pack(side=LEFT, fill=Y)
-streambox.pack(side=LEFT, fill=Y)
-langbox.pack(side=LEFT, fill=Y)
+playlistbox.pack(side=LEFT, fill=X, expand=TRUE)
+streambox.pack(side=LEFT, fill=X, expand=TRUE)
+langbox.pack(side=LEFT, fill=X, expand=TRUE)
 
 three_scroll.pack(side=RIGHT, fill=Y)
 four_scroll.pack(side=RIGHT, fill=Y)
@@ -149,50 +139,50 @@ seven = tkinter.Frame(bluapp)
 seven.pack(side=TOP, fill=X, pady=1)
 
 # Add a progressbar to the program and make sure it is about 45% full!
-seven_progress = ttk.Progressbar(orient=HORIZONTAL, mode="determinate", value=45)
-seven_progress.pack(fill=X)
+seven_progress = ttk.Progressbar(seven, orient=HORIZONTAL, mode="determinate", value=45)
+seven_progress.pack(side=LEFT, fill=X, expand=TRUE)
 
 # Add a settings button
 button_settings = tkinter.Button(seven, text="Settings", command=FALSE)
 button_settings.pack(side=RIGHT)
 
-##################
-#
-#  Live Testing Debug
-#
-#  Generating  a few Treeview listbox entries. Testing scrolling and selections
-##################
-.three.playlistbox children {}
-.four.streambox children {}
-.five.langbox children {}
-
-.three.playlistbox delete [.three.playlistbox children {}]
-.four.streambox  delete [.four.streambox children {}]
-.five.langbox  delete [.five.langbox children {}]
-
-foreach i {0 1 2 3 4 5 6 7} {
-.three.playlistbox insert {} end -text FuntimeMovieTime -values [list 000$i.m2ts 0$i  1:2$i:00 4$i,542,421]
-}
-
-
-foreach i {0 1 2 3 4 5 6 7} {
-.five.langbox insert {} end -text MichelThomasin -values {French Francais "192 kbps" {PushaMan}}
-.five.langbox insert {} end -text MichelThomasin -values {German Deutsch "192 kbps" {PushaMan}} \
-}
-
-.four.streambox insert {} end -text XXXTentacion -values {English English 142 80}
-.four.streambox insert {} end -text XXXTentacion -values {English English "142 kbps" {PushaMan}}
-.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "156 kbps" {PushaMan}}
-.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "192 kbps" {PushaMan}}
-
-##################
-#
-#  Live Testing Debug
-#
-#  Generating Lorem Ipsum Data for textbox
-##################
-
-set lorem "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod ornare convallis. Sed sit amet nisi sem. Integer commodo tincidunt lectus ut cursus. Phasellus at sollicitudin massa. Phasellus scelerisque consequat nibh non finibus. Vestibulum dolor sapien, faucibus et finibus quis, placerat in lacus. Aliquam semper, ligula faucibus dapibus accumsan, tellus urna sagittis eros, a aliquam urna magna sed sapien. \n Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras eleifend enim sit amet neque mollis, eu dapibus felis hendrerit. Pellentesque at interdum libero, quis efficitur augue. Nam enim enim, porta eget porta sit amet, tristique non nulla. Nam ac blandit risus, vel consectetur neque. Sed in congue odio. Duis iaculis efficitur mauris, eu eleifend libero pellentesque non. Pellentesque ut justo semper, rhoncus odio vitae, commodo tortor. Nullam sed enim massa. Donec eget luctus nibh, ut venenatis nunc. Donec volutpat, dolor eget mattis congue, lacus mi commodo lacus, in accumsan massa nisi vitae odio. Quisque non tempor nulla. Fusce iaculis, magna vel ornare condimentum, orci erat mattis orci, vitae tincidunt leo felis id magna. Integer in pretium velit, ut vulputate nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur ut sem condimentum, condimentum nisi nec, facilisis velit."
-.six.text conf -state normal
-.six.text insert 1.0 $lorem
-.six.text conf -state disabled
+####################
+###
+###  Live Testing Debug
+###
+###  Generating  a few Treeview listbox entries. Testing scrolling and selections
+####################
+##.three.playlistbox children {}
+##.four.streambox children {}
+##.five.langbox children {}
+##
+##.three.playlistbox delete [.three.playlistbox children {}]
+##.four.streambox  delete [.four.streambox children {}]
+##.five.langbox  delete [.five.langbox children {}]
+##
+##foreach i {0 1 2 3 4 5 6 7} {
+##.three.playlistbox insert {} end -text FuntimeMovieTime -values [list 000$i.m2ts 0$i  1:2$i:00 4$i,542,421]
+##}
+##
+##
+##foreach i {0 1 2 3 4 5 6 7} {
+##.five.langbox insert {} end -text MichelThomasin -values {French Francais "192 kbps" {PushaMan}}
+##.five.langbox insert {} end -text MichelThomasin -values {German Deutsch "192 kbps" {PushaMan}} \
+##}
+##
+##.four.streambox insert {} end -text XXXTentacion -values {English English 142 80}
+##.four.streambox insert {} end -text XXXTentacion -values {English English "142 kbps" {PushaMan}}
+##.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "156 kbps" {PushaMan}}
+##.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "192 kbps" {PushaMan}}
+##
+####################
+###
+###  Live Testing Debug
+###
+###  Generating Lorem Ipsum Data for textbox
+####################
+##
+##set lorem "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod ornare convallis. Sed sit amet nisi sem. Integer commodo tincidunt lectus ut cursus. Phasellus at sollicitudin massa. Phasellus scelerisque consequat nibh non finibus. Vestibulum dolor sapien, faucibus et finibus quis, placerat in lacus. Aliquam semper, ligula faucibus dapibus accumsan, tellus urna sagittis eros, a aliquam urna magna sed sapien. \n Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras eleifend enim sit amet neque mollis, eu dapibus felis hendrerit. Pellentesque at interdum libero, quis efficitur augue. Nam enim enim, porta eget porta sit amet, tristique non nulla. Nam ac blandit risus, vel consectetur neque. Sed in congue odio. Duis iaculis efficitur mauris, eu eleifend libero pellentesque non. Pellentesque ut justo semper, rhoncus odio vitae, commodo tortor. Nullam sed enim massa. Donec eget luctus nibh, ut venenatis nunc. Donec volutpat, dolor eget mattis congue, lacus mi commodo lacus, in accumsan massa nisi vitae odio. Quisque non tempor nulla. Fusce iaculis, magna vel ornare condimentum, orci erat mattis orci, vitae tincidunt leo felis id magna. Integer in pretium velit, ut vulputate nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur ut sem condimentum, condimentum nisi nec, facilisis velit."
+##.six.text conf -state normal
+##.six.text insert 1.0 $lorem
+##.six.text conf -state disabled
