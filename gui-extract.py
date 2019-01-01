@@ -1,11 +1,5 @@
 #!/bin/env python3
 
-import tkinter
-from tkinter import ttk
-from tkinter.constants import *
-
-#!/bin/env python3
-
 __version__ = 0.5
 
 import tkinter
@@ -94,7 +88,7 @@ five.pack(side=TOP, fill=X, pady=1)
 
 # Add TTK Treeview with no tree to the fifth frame.
 langbox_col = [ "Codec", "Language", "Bitrate", "Description" ]
-langbox = ttk.Treeview(five, show="headings", columns=langbox_col, selectmode=NONE, height=8)
+langbox = ttk.Treeview(five, show="headings", columns=langbox_col, selectmode=NONE, height=7)
 
 
 # # Add appropriate headings text to each column.
@@ -146,12 +140,12 @@ seven_progress.pack(side=LEFT, fill=X, expand=TRUE)
 button_settings = tkinter.Button(seven, text="Settings", command=FALSE)
 button_settings.pack(side=RIGHT)
 
-####################
-###
-###  Live Testing Debug
-###
-###  Generating  a few Treeview listbox entries. Testing scrolling and selections
-####################
+##################
+#
+#  Live Testing Debug
+#
+#  Generating  a few Treeview listbox entries. Testing scrolling and selections
+##################
 ##.three.playlistbox children {}
 ##.four.streambox children {}
 ##.five.langbox children {}
@@ -160,29 +154,27 @@ button_settings.pack(side=RIGHT)
 ##.four.streambox  delete [.four.streambox children {}]
 ##.five.langbox  delete [.five.langbox children {}]
 ##
-##foreach i {0 1 2 3 4 5 6 7} {
-##.three.playlistbox insert {} end -text FuntimeMovieTime -values [list 000$i.m2ts 0$i  1:2$i:00 4$i,542,421]
-##}
-##
-##
-##foreach i {0 1 2 3 4 5 6 7} {
-##.five.langbox insert {} end -text MichelThomasin -values {French Francais "192 kbps" {PushaMan}}
-##.five.langbox insert {} end -text MichelThomasin -values {German Deutsch "192 kbps" {PushaMan}} \
-##}
-##
-##.four.streambox insert {} end -text XXXTentacion -values {English English 142 80}
-##.four.streambox insert {} end -text XXXTentacion -values {English English "142 kbps" {PushaMan}}
-##.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "156 kbps" {PushaMan}}
-##.four.streambox insert {} end -text XXXTentacion -values {Spanish Castellano "192 kbps" {PushaMan}}
-##
-####################
-###
-###  Live Testing Debug
-###
-###  Generating Lorem Ipsum Data for textbox
-####################
-##
-##set lorem "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod ornare convallis. Sed sit amet nisi sem. Integer commodo tincidunt lectus ut cursus. Phasellus at sollicitudin massa. Phasellus scelerisque consequat nibh non finibus. Vestibulum dolor sapien, faucibus et finibus quis, placerat in lacus. Aliquam semper, ligula faucibus dapibus accumsan, tellus urna sagittis eros, a aliquam urna magna sed sapien. \n Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras eleifend enim sit amet neque mollis, eu dapibus felis hendrerit. Pellentesque at interdum libero, quis efficitur augue. Nam enim enim, porta eget porta sit amet, tristique non nulla. Nam ac blandit risus, vel consectetur neque. Sed in congue odio. Duis iaculis efficitur mauris, eu eleifend libero pellentesque non. Pellentesque ut justo semper, rhoncus odio vitae, commodo tortor. Nullam sed enim massa. Donec eget luctus nibh, ut venenatis nunc. Donec volutpat, dolor eget mattis congue, lacus mi commodo lacus, in accumsan massa nisi vitae odio. Quisque non tempor nulla. Fusce iaculis, magna vel ornare condimentum, orci erat mattis orci, vitae tincidunt leo felis id magna. Integer in pretium velit, ut vulputate nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur ut sem condimentum, condimentum nisi nec, facilisis velit."
-##.six.text conf -state normal
-##.six.text insert 1.0 $lorem
-##.six.text conf -state disabled
+for i in range(0,12):
+    playlistbox.insert("", END, text="FuntimeMovieTime", values=["000"+repr(i)+".m2ts", "0"+repr(i), "1:2"+repr(i)+":00", "4"+repr(i)+",542,421"])
+
+
+for i in range(0,7):
+    langbox.insert("", END, text="XXXTentacion", values=["French", "Francais", "192 kbps", "PushaMan"])
+    if i %2 == 0:
+        streambox.insert("", END, text="Even", values=["English", "English", "142 kbps", "PushaMan"])
+        langbox.insert("", END, text="XXXTentacion", values=["Bulgarian", "Bulgar", "256 kbps", "Savon"])
+    else:
+        streambox.insert("", END, text="Odd", values=["Spanish", "Castellano", "156 kbps", "Sicco Mode"])
+
+
+##################
+#
+#  Live Testing Debug
+#
+#  Generating Lorem Ipsum Data for textbox
+##################
+
+lorem="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod ornare convallis. Sed sit amet nisi sem. Integer commodo tincidunt lectus ut cursus. Phasellus at sollicitudin massa. Phasellus scelerisque consequat nibh non finibus. Vestibulum dolor sapien, faucibus et finibus quis, placerat in lacus. Aliquam semper, ligula faucibus dapibus accumsan, tellus urna sagittis eros, a aliquam urna magna sed sapien. \n Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras eleifend enim sit amet neque mollis, eu dapibus felis hendrerit. Pellentesque at interdum libero, quis efficitur augue. Nam enim enim, porta eget porta sit amet, tristique non nulla. Nam ac blandit risus, vel consectetur neque. Sed in congue odio. Duis iaculis efficitur mauris, eu eleifend libero pellentesque non. Pellentesque ut justo semper, rhoncus odio vitae, commodo tortor. Nullam sed enim massa. Donec eget luctus nibh, ut venenatis nunc. Donec volutpat, dolor eget mattis congue, lacus mi commodo lacus, in accumsan massa nisi vitae odio. Quisque non tempor nulla. Fusce iaculis, magna vel ornare condimentum, orci erat mattis orci, vitae tincidunt leo felis id magna. Integer in pretium velit, ut vulputate nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur ut sem condimentum, condimentum nisi nec, facilisis velit."
+info_text.config(state=NORMAL)
+info_text.insert(END, lorem)
+info_text.config(state=DISABLED)
