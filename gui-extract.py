@@ -1,10 +1,20 @@
 #!/bin/env python3
 
 __version__ = 0.5
+__author__ = "Ru Uba"
 
 import tkinter
-from tkinter import ttk
+from tkinter import ttk, filedialog
 from tkinter.constants import *
+
+# GUI Function Definitions
+def browse_action():
+    # Allow user to select a directory and store it in global var
+    # called folder_path
+    global source_var
+    filepath = filedialog.askdirectory()
+    source_var.set(filepath)
+    print(filepath)
 
 # Program Version or Generica
 bluapp = tkinter.Tk()
@@ -17,17 +27,21 @@ bluapp.title = ("bluinfo.py {}".format(__version__))
 topframe = tkinter.Frame(pady=10)
 topframe.pack(side=TOP, fill=X)
 
+# Create a TextVariable for the Entry Path box
+source_var = tkinter.StringVar()
+
+#  Create a label and textentry and pack to the left. Super Extraneous
+label_selectsource = tkinter.Label(topframe, text="Select the BDROM Source:")
+entry_entrypath = tkinter.Entry(topframe, background="yellow", foreground="green", width=100, textvariable=source_var)
+label_selectsource.pack(side=LEFT)
+entry_entrypath.pack(side=LEFT, expand=TRUE, fill=Y)
+
 # Create the clickable buttons for slection and  pack to the right of the top frame
-button_browse = tkinter.Button(topframe, text="Browse", command=FALSE)
+button_browse = tkinter.Button(topframe, text="Browse", command=browse_action)
 button_scan = tkinter.Button(topframe, text="Scan", command=FALSE)
 button_scan.pack(side=RIGHT, padx=2)
 button_browse.pack(side=RIGHT, padx=2)
 
-#  Create a label and textentry and pack to the left. Super Extraneous
-label_selectsource = tkinter.Label(topframe, text="Select the BDROM Source:")
-entry_entrypath = tkinter.Entry(topframe, background="yellow", foreground="green", width=100)
-label_selectsource.pack(side=LEFT)
-entry_entrypath.pack(side=LEFT, expand=TRUE, fill=Y)
 
 ##################
 # Change Entry Path configuration from above. Disable Entrypath Point. Change DisableBackground to lightblue const.
