@@ -10,11 +10,16 @@ from tkinter.constants import *
 # GUI Function Definitions
 def browse_action():
     # Allow user to select a directory and store it in global var
-    # called folder_path
     global source_var
     filepath = filedialog.askdirectory()
     source_var.set(filepath)
     print(filepath)
+
+def selall_action():
+    playlistbox.selection_set(playlistbox.get_children())
+
+def selnone_action():
+    playlistbox.selection_remove(playlistbox.get_children())
 
 
 # Program Version or Generica
@@ -43,7 +48,6 @@ button_scan = tkinter.Button(topframe, text="Scan", command=FALSE)
 button_scan.pack(side=RIGHT, padx=2)
 button_browse.pack(side=RIGHT, padx=2)
 
-
 ##################
 # Change Entry Path configuration from above. Disable Entrypath Point. Change DisableBackground to lightblue const.
 # https://www.tcl.tk/man/tcl8.4/TkCmd/entry.htm#M16
@@ -60,8 +64,8 @@ two.pack(side=TOP, fill=X)
 
 # Pack playlist  label and buttons and pack to the left in order
 label_selectplaylist = tkinter.Label(two, text="Select Playlist(s):")
-button_selall = tkinter.Button(two, text="Select All", command=FALSE)
-button_selnone = tkinter.Button(two, text="Select None", command=FALSE)
+button_selall = tkinter.Button(two, text="Select All", command=selall_action)
+button_selnone = tkinter.Button(two, text="Select None", command=selnone_action)
 button_selcustom = tkinter.Button(two, text="Custom", command=FALSE)
 
 label_selectplaylist.pack(side=LEFT, padx=2)
