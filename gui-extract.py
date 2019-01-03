@@ -1,7 +1,7 @@
 #!/bin/env python3
 
 __version__ = 0.5
-__author__ = "Ru Uba"
+__author__ = "SavSanta (Ru Uba)"
 
 import tkinter
 from tkinter import ttk, filedialog
@@ -15,6 +15,7 @@ def browse_action():
     filepath = filedialog.askdirectory()
     source_var.set(filepath)
     print(filepath)
+
 
 # Program Version or Generica
 bluapp = tkinter.Tk()
@@ -32,7 +33,7 @@ source_var = tkinter.StringVar()
 
 #  Create a label and textentry and pack to the left. Super Extraneous
 label_selectsource = tkinter.Label(topframe, text="Select the BDROM Source:")
-entry_entrypath = tkinter.Entry(topframe, background="yellow", foreground="green", width=100, textvariable=source_var)
+entry_entrypath = tkinter.Entry(topframe, background="yellow", foreground="green", width=100)
 label_selectsource.pack(side=LEFT)
 entry_entrypath.pack(side=LEFT, expand=TRUE, fill=Y)
 
@@ -51,7 +52,7 @@ entry_entrypath.configure(state=DISABLED)
 entry_entrypath.configure(disabledbackground="lightblue")
 
 # Make entrypath linked to a textvariable
-entry_entrypath.configure(textvariable=FALSE)
+entry_entrypath.configure(textvariable=source_var)
 
 # Add Second level frame for containing playlist selection widgets
 two = tkinter.Frame(bluapp)
