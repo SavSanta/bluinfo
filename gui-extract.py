@@ -21,13 +21,17 @@ def selall_action():
 def selnone_action():
     playlistbox.selection_remove(playlistbox.get_children())
 
+def sett_open():
+    w = tkinter.Toplevel(bg="lightblue")
+    w.title("Kiss My Bumper")
+
 
 # Program Version or Generica
 bluapp = tkinter.Tk()
 bluapp.configure({'padx':10})
 
 # Set Window Title
-bluapp.title = ("bluinfo.py {}".format(__version__))
+bluapp.title("bluinfo.py {}".format(__version__))
 
 # Create and pack a top frame
 topframe = tkinter.Frame(pady=10)
@@ -156,7 +160,7 @@ seven_progress = ttk.Progressbar(seven, orient=HORIZONTAL, mode="determinate", v
 seven_progress.pack(side=LEFT, fill=X, expand=TRUE)
 
 # Add a settings button
-button_settings = tkinter.Button(seven, text="Settings", command=FALSE)
+button_settings = tkinter.Button(seven, text="Settings", command=sett_open)
 button_settings.pack(side=RIGHT)
 
 ##################
