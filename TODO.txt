@@ -7,16 +7,15 @@ when I call them in other classes functions/methods. I tested it in IDLE and it 
 - In the same vein see about detecting and supporting H.265/x265/HEVC
 - Make more standard string names for human output ie (DTS -> Dolby True Surround)
 - Clean up program to follow the standard Python formats (ie 80 character screen, standard naming conventions, __init__ == main, etc)
-- Colorize the command output like wifite.py
+- Colorize the command output in bash like wifite.py
 - Figure out better naming conventions
 - Change my  return None and associated checks into exception raised and handled
-- GUI design
 - Add logging module for info output
 - Think about turning the methods defined functions in the ts_streamtype classes (like convertvideformat, convertsamplerate, etc) into property (methods that computer their value when access)
 - Make program faster https://wiki.python.org/moin/PythonSpeed/PerformanceTips
-- Investigate if I can use in the MPLS laylist reader portion an actual StreamReader that remembers the last position instead of a list (as im doing with the pos variable since Python doesnt support a ref keyword).
+- Investigate if I can use in the MPLS playlist reader portion with an actual StreamReader object that remembers the last position instead of a list (as im doing with the pos variable since Python doesnt support a ref keyword). This entails verifying that I only need to search  forward.
 - https://stackoverflow.com/questions/17137490/pythonic-enumeration-of-while-loop#17137764
 - Maybe support the edgecase AVCHD FAT32/UDF ( Slight different extensions on core files MPL, CLP, BDM, etc)
 - Replace os.path with pathlib if it is possibly better
 - Investigate if on Linux/Mac if we need to provide a permanent or temporary file renamer (for BDMV/STREAM/CLIPINF/BDJO, etc) because the case sensitivity impacts these systems but I dont want to alter the hash of say torrents or system pointers.
-- The createplaylist and debug_stream section where we set the variable doesnt actually work at all because I ued the wrong variable names. However, since it never crashes or otherwise interferes with the program, I guess I'll leave it as a known issue as it's only useful for detecting/marking hidden streams in my interest.
+- The createplaylist and debug_stream section where we set the variable doesnt actually work at all because I used the wrong variable names. However, since it never crashes or otherwise interferes with the program, I guess I'll leave it as a known issue as it's only useful for detecting/marking "hidden streams" (egJapanese Audio Subs in North American Releases), which I want to show anyway.
