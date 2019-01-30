@@ -1,11 +1,12 @@
 #!/bin/env python3
 
-__version__ = 0.5
+__version__ = 0.7
 __author__ = "SavSanta (Ru Uba)"
 
 import tkinter
 from tkinter import ttk, filedialog
 from tkinter.constants import *
+
 
 # GUI Function Definitions
 def browse_action():
@@ -22,8 +23,10 @@ def selnone_action():
     playlistbox.selection_remove(playlistbox.get_children())
 
 def sett_open():
-    w = tkinter.Toplevel(bg="lightblue")
-    w.title("Kiss My Bumper")
+    w_sett = tkinter.Toplevel(pady=10)
+    w_sett.title("Settings")
+    cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=intvar_filtersecs).pack(anchor=W)
+    cbox_filterloops = tkinter.Checkbutton(w_sett, text="Filter Out Playlists that Loop", variable=intvar_filterloops).pack(anchor=W)
 
 
 # Program Version or Generica
@@ -33,12 +36,14 @@ bluapp.configure({'padx':10})
 # Set Window Title
 bluapp.title("bluinfo.py {}".format(__version__))
 
+# StringVar , IntVar, StringVar - Settings Window, TextVariable on entry
+intvar_filtersecs = tkinter.IntVar()
+intvar_filterloops = tkinter.IntVar() 
+source_var = tkinter.StringVar()
+
 # Create and pack a top frame
 topframe = tkinter.Frame(pady=10)
 topframe.pack(side=TOP, fill=X)
-
-# Create a TextVariable for the Entry Path box
-source_var = tkinter.StringVar()
 
 #  Create a label and textentry and pack to the left. Super Extraneous
 label_selectsource = tkinter.Label(topframe, text="Select the BDROM Source:")
