@@ -9,7 +9,7 @@ import ts_scanner as ScanTask
 from datetime import timedelta         # date and date conversions for logs
 from collections import OrderedDict
 
-__version__ = "0.5"
+__version__ = "0.6"
 __author__ = "SavSanta"
 
 sysplatform =  sys.platform     # For future bug testing on Windows
@@ -136,8 +136,9 @@ class BDROM():
         # Find Main Title (Really it's "Guess Main Title")
         
         assert(self.playlistsresults)
+
         def dsort(k):
-            if not k[1].playlistchapters: # This logic added because there may be a bug with VC-1 video only tracks as evident in Empire Of The Sun 00010.mpls 
+            if not k[1].playlistchapters: # This logic added because there may be a bug with VC-1 video-only tracks as evident in Empire Of The Sun 00010.mpls 
                 return ("0:00:00.000", 0)
             else:
                 v1 = self.convertchaptersecs(timedelta(seconds=k[1].playlistchapters[-1]))
