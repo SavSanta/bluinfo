@@ -85,6 +85,7 @@ class BDROM():
                 self.bd_plus = True
         return
 
+
     def specialBDMV(self):
         if (self.dir_root): 
             
@@ -104,6 +105,14 @@ class BDROM():
                 if s[2].__len__():          # Note the C-Sharp code matches against the actual *.mnv files. I didnt but should verify if such folders contain anything other than that.
                     self.bd_psp = True
                     del s
+                    
+            if os.path.exists((os.path.join(self.dir_bdmv, "META", "DL", "bdmt_eng.xml"))):
+                with open((os.path.join(self.dir_bdmv, "META", "DL", "bdmt_eng.xml")), "rb") as bdmt_eng:
+                    bdmt = bdmt_eng.read()
+                    start = bdmt.index(b"<di:name>")     
+                    end = bdmt.rindex(b"</di:name>")
+                    self.title = bdmt[start+9:end].decode("utf-8")
+
         else:
             raise Exception("Instance's dir_root attribute has either not been set or doesnt exist.")
             
