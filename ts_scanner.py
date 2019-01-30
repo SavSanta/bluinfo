@@ -5,9 +5,11 @@ import os                                # Portability module
 import iso_639_2map         # Converting language codes ISO-639-2 
 import ts_streamtypeclass
 from ts_attrconst import StreamType
-from os.path import basename as basename
+from os.path import basename
 from iso_639_2map import isolangfunc         # Converting language codes ISO-639-2 
 
+# pp = "/home/santa/GIT_Repos/MYPROJ_bdinfoPort/"; pl = ["00120.mpls"] ; cl = ["00000.clpi"]; sl = ["00000.m2ts"]
+# playlistscan(pp,pl,cl,sl)
 
 
 def clipfilescan(cpath,cliplists):
@@ -27,7 +29,7 @@ def clipfilescan(cpath,cliplists):
             cliplength = (binreadfile[clipIndex] << 24) + (binreadfile[clipIndex + 1] << 16) + (binreadfile[clipIndex + 2] << 8) + (binreadfile[clipIndex + 3])
 
             clipdata = bytes(cliplength)                                 
-            clipdata = binreadfile[(clipIndex+4):]    #Altered Here because the Csharp version uses Array.Copy and one parameter is length but its cumulative. Since I dont know how they arrived exactly at how many more cumulative bytes to copy I'll just copy the entire rest of the array. So it's different from the Csharp here. I suppose I could do the len(array + math) but nah.
+            clipdata = binreadfile[(clipIndex+4):]    #Altered here because the Csharp version uses Array.Copy and one parameter is length but its cumulative. Since I dont know how they arrived exactly at how many more cumulative bytes to copy I'll just copy the entire rest of the array. So it's different from the Csharp here. I suppose I could do the len(array + math) but nah.
 
             streamscount = clipdata[8]
             streamoffset = 10
@@ -355,14 +357,20 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
 
                 
                 streaminfolength = readint16(binfiledatas, pos)
-                pos[0] += 2
-                streamcountvideo = binfiledatas[pos[0]+1]
-                streamcountaudio = binfiledatas[pos[0]+1]
-                streamcountpg = binfiledatas[pos[0]+1]
-                streamcountig = binfiledatas[pos[0]+1]
-                streamcountsecondaryaudio = binfiledatas[pos[0]+1]
-                streamcountsecondaryvideo = binfiledatas[pos[0]+1]
-                streamcountpip = binfiledatas[pos[0]+1]
+                pos[0] += 2                                                     #Move position ahead over 2 reserved bytes
+                streamcountvideo = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountaudio = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountpg = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountig = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountsecondaryaudio = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountsecondaryvideo = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountpip = binfiledatas[pos[0]]
                 pos[0] += 5
                 
                 print("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8}".format(basename(f.name),streamfilename, streamcountvideo, streamcountaudio, streamcountpg, streamcountig, streamcountsecondaryaudio, streamcountsecondaryvideo, streamcountpip))
