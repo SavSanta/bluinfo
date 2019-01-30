@@ -193,6 +193,8 @@ class TSAudioStream(Stream):
     def __str__(self):
         return "The ID is {}, the language code is {} (most likely references {}), the codec type is {}, the channel description is {}, and the general description is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc(), self.desc())
 
+
+
 class TSTextStream(Stream):
     def __init__(self):
         self.isVBR = True
@@ -201,7 +203,7 @@ class TSTextStream(Stream):
 
     def __str__(self):        
         return "The ID is {}, the language code is {} (most likely references {}) and the  codec is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
-        
+
 
 class TSGraphicsStream(Stream):
     def __init__(self):
@@ -211,10 +213,9 @@ class TSGraphicsStream(Stream):
 
     def __str__(self):        
        return "The ID is {}, the language code is {} (most likely references {}) and the codec is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
-        
+
 
 # Playlist Class Structure
-
 class MPLS(object):
     
     def __init__(self):
@@ -254,7 +255,8 @@ class StreamClip(object):
     def __init__(self):
         self.chapters = []
 
-    
+    def __repr__(self):
+        return repr("StreamClip Obj -> " +  self.name + " - " + str(self.chapters))
 
     
     
