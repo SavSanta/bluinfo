@@ -28,6 +28,11 @@ def sett_open():
     cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=intvar_filtersecs).pack(anchor=W)
     cbox_filterloops = tkinter.Checkbutton(w_sett, text="Filter Out Playlists that Loop", variable=intvar_filterloops).pack(anchor=W)
 
+def box_header(col, listcol):
+    for j in col:
+        listcol.heading(j, text=j.title())
+
+
 
 # Program Version or Generica
 bluapp = tkinter.Tk()
@@ -38,7 +43,7 @@ bluapp.title("bluinfo.py {}".format(__version__))
 
 # StringVar , IntVar, StringVar - Settings Window, TextVariable on entry
 intvar_filtersecs = tkinter.IntVar()
-intvar_filterloops = tkinter.IntVar() 
+intvar_filterloops = tkinter.IntVar()
 source_var = tkinter.StringVar()
 
 # Create and pack a top frame
@@ -88,14 +93,13 @@ three.pack(side=TOP, fill=X, pady=1)
 
 # Add TTK Treeview with no tree to the third frame.
 # May need to implement checkbox style someone made here https://github.com/RedFantom/s/blob/master/s/checkboxtreeview.py
+# See also treeview_multicolumn.py
 # Also https://groups.google.com/forum/#!topic/comp.lang.tcl/VwG4_7-1538
 playlist_col = [ "Playlist", "File Group", "Length", "Size" ]
 playlistbox = ttk.Treeview(three, show="headings", columns=playlist_col, selectmode=EXTENDED, height=7)
 
-# # Add appropriate headings text to each column.
-# foreach i {0 1 2 3} j {Playlist "File Group" Length Size } {
-# .three.playlistbox  heading $i -text $j \
-# }
+box_header(playlist_col, playlistbox)
+
 
 # Add fourth level frame for containing stream file listbox widgets
 four = tkinter.Frame(bluapp)
@@ -174,14 +178,7 @@ button_settings.pack(side=RIGHT)
 #
 #  Generating  a few Treeview listbox entries. Testing scrolling and selections
 ##################
-##.three.playlistbox children {}
-##.four.streambox children {}
-##.five.langbox children {}
-##
-##.three.playlistbox delete [.three.playlistbox children {}]
-##.four.streambox  delete [.four.streambox children {}]
-##.five.langbox  delete [.five.langbox children {}]
-##
+
 for i in range(0,12):
     playlistbox.insert("", END, text="FuntimeMovieTime", values=["000"+repr(i)+".m2ts", "0"+repr(i), "1:2"+repr(i)+":00", "4"+repr(i)+",542,421"])
 
