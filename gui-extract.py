@@ -28,10 +28,9 @@ def sett_open():
     cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=intvar_filtersecs).pack(anchor=W)
     cbox_filterloops = tkinter.Checkbutton(w_sett, text="Filter Out Playlists that Loop", variable=intvar_filterloops).pack(anchor=W)
 
-def box_header(col, listcol):
-    for j in col:
-        listcol.heading(j, text=j.title())
-
+def fill_header(col, listcol):
+    for i in col:
+        listcol.heading(i, text=i.title())
 
 
 # Program Version or Generica
@@ -98,8 +97,8 @@ three.pack(side=TOP, fill=X, pady=1)
 playlist_col = [ "Playlist", "File Group", "Length", "Size" ]
 playlistbox = ttk.Treeview(three, show="headings", columns=playlist_col, selectmode=EXTENDED, height=7)
 
-box_header(playlist_col, playlistbox)
-
+# Add appropriate headings text to each column.
+fill_header(playlist_col, playlistbox)
 
 # Add fourth level frame for containing stream file listbox widgets
 four = tkinter.Frame(bluapp)
@@ -109,10 +108,8 @@ four.pack(side=TOP, fill=X, pady=1)
 streambox_col = [ "Stream File", "Length", "Size" ]
 streambox = ttk.Treeview(four, show="headings", columns=streambox_col, selectmode=NONE, height=5)
 
-# # Add appropriate headings text to each column.
-# foreach i {0 1 2} j {"Stream File" Length Size } {
-# .four.streambox  heading $i -text $j \
-# }
+# Add appropriate headings text to each column.
+fill_header(streambox_col, streambox)
 
 # Add fifth level frame for containing playlist listbox widgets
 five = tkinter.Frame(bluapp)
@@ -122,12 +119,8 @@ five.pack(side=TOP, fill=X, pady=1)
 langbox_col = [ "Codec", "Language", "Bitrate", "Description" ]
 langbox = ttk.Treeview(five, show="headings", columns=langbox_col, selectmode=NONE, height=7)
 
-
-# # Add appropriate headings text to each column.
-# foreach i {0 1 2 3} j { Codec Language Bitrate  Description } {
-# .five.langbox  heading $i -text $j \
-# }
-
+#  Add appropriate headings text to each column.
+fill_header(langbox_col, langbox)
 
 # Scrollboxes added to playlist, stream, and language boxes above
 three_scroll = ttk.Scrollbar(three, orient=VERTICAL, command=playlistbox.yview)
