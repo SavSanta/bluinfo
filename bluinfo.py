@@ -166,11 +166,12 @@ class BDROM():
         for file, mpls in self.playlistsresults.items():
             print("PLAYLIST: ", file)
             print("======================")
-            print("FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t' + "DURATION")
+            print("FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t\t' + "DURATION")
             for index in range(0, len(mpls.chapterclips)):
                 print(mpls.chapterclips[index].name + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimeout)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].length)))
             print()
-            
+
+        BDROM.convertchaptersecs(timedelta(seconds=x.playlistsresults['00012.mpls'].totallength))
             
     @staticmethod
     def listloader(dirpath, ftype):
