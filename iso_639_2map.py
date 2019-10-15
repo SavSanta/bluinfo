@@ -1,5 +1,5 @@
-# Do I need to do an if __main__ here?
-# I didnt copy codecshortname into a dicts it is nigh the same as codecaltname
+#/usr/bin/env python3
+# coding=utf8
 
 from collections import defaultdict
 from ts_attrconst import StreamType, AudioMode
@@ -169,7 +169,7 @@ isolangdict = defaultdict(lambda: str("Unknown"), {
 "ell": "Greek",
 "grn": "Guarani",
 "guj": "Gujarati",
-"gwi": "Gwich´in",
+"gwi": "Gwich'in",
 "hai": "Haida",
 "hau": "Hausa",
 "haw": "Hawaiian",
