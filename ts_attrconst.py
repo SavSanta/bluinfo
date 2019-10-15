@@ -2,7 +2,7 @@ class StreamType:
     Unknown  =  0      
     MPEG1_VIDEO  =  0x01 
     MPEG2_VIDEO  =  0x02 
-    AVC_VIDEO  =  0x1B                  # referenced in libbluray strings.h as H.264
+    AVC_VIDEO  =  0x1B                  # referenced in libbluray strings.h and ExifTool10.29 as H.264 
     MVC_VIDEO  =  0x20 
     VC1_VIDEO  =  0xEA                  # referenced in libbluray strings.h as H.264 MVC
     HEVC_VIDEO = 0x24                # referenced in libbluray bluray.h as H265/HEVC

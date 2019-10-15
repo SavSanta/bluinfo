@@ -9,18 +9,32 @@ import ts_scanner as ScanTask
 from datetime import timedelta         # date and date conversions for logs
 from collections import OrderedDict
 
-__version__ = "0.5"
-__author__ = "SavSanta"
-
+__version__ = "0.6"
+__author__ = "SavSanta (Ru Uba)"
 sysplatform =  sys.platform     # For future bug testing on Windows
+
+# Remove Later
+testp = "/media/santa/My Passport/Tenable C Drive/RUSH_HOUR_2"
+def runit(bdrom):
+        bdrom.checkBDMV()
+        bdrom.cryptBDMV()
+        bdrom.listBDMV()
+        bdrom.specialBDMV()
+        bdrom.scanBDMV()
+        return bdrom
+
 
 class BDROM():
 
-    def __init__(self):
+    def __repr__(self):
+        return "BDROM - '{}'".format(self.title)
 
-       self.dir_root = None
+    def __init__(self, path):
+
+       self.dir_root = path
        self.dir_bdmv = None
-       
+       self.title = None
+
        self.dir_bdjo = None
        self.dir_clip = None
        self.dir_playlist = None
@@ -37,18 +51,17 @@ class BDROM():
        self.bd_size = 0
 
 
-    def checkBDMV(self, filepath):
-        if not os.path.exists(filepath):
-            raise IOError("Ensure the path exists: ", filepath)    # Write exception handler (IOError, NotADirectory, etc)
+    def checkBDMV(self):
+        if not os.path.exists(self.dir_root):
+            raise IOError("Ensure the path exists: ", self.dir_root)    # Write exception handler (IOError, NotADirectory, etc)
         else:
             pass
                
-        filepath = os.path.join((os.path.expanduser(filepath)), "")   # This will add a trailing / incase it's not already added. Notation in case this breaks something. Especially across different platforms. Although, if Im not mistaken Windows platform can handle double forward slash as well as Unix platforms to some degree. # SideThought: Should I check the os.path.supports_unicode_filenames variable for certain filesystems? Being that the os.path.walk documentation says depending on path supplied it could be byte strings or unicode strings.
-        print("Attempting to utilize path \' %s \' as the root directory." % filepath)
+        self.dir_root = os.path.join((os.path.expanduser(self.dir_root)), "")   # This will add a trailing / incase it's not already added. Notation in case this breaks something. Especially across different platforms. Although, if Im not mistaken Windows platform can handle double forward slash as well as Unix platforms to some degree. # SideThought: Should I check the os.path.supports_unicode_filenames variable for certain filesystems? Being that the os.path.walk documentation says depending on path supplied it could be byte strings or unicode strings.
+        print("Attempting to utilize path \' %s \' as the root directory." % self.dir_root)
                                                                
-        if "BDMV" in [x for x in os.listdir(filepath) if os.path.isdir(os.path.join(filepath, x))]:                                              # On Unix systems we have to be wary aboout the case sensitivity?  Testing for "BDMV" versus "bdmv". Most BDMVs are caps ime. May implement a solution using re module or fnmatch
-            self.dir_root = filepath                                                    # Should note when using the os.path.join() methods later, basically only the first string can use an absolute path without deleting the rest. See help(os.path.join) for what I mean
-            self.dir_bdmv = os.path.join(filepath, "BDMV", "")          # I explicitly join and set the path to it's BDMV variable here. Maybe I should convert it to an absolute path to make extra clear?
+        if "BDMV" in [x for x in os.listdir(self.dir_root) if os.path.isdir(os.path.join(self.dir_root, x))]:                                              # On Unix systems we have to be wary aboout the case sensitivity?  Testing for "BDMV" versus "bdmv". Most BDMVs are caps ime. May implement a solution using re module or fnmatch
+            self.dir_bdmv = os.path.join(self.dir_root, "BDMV", "")          # I explicitly join and set the path to it's BDMV variable here. Maybe I should convert it to an absolute path to make extra clear?
 
             listcomp = os.listdir(self.dir_bdmv)
             if ("CLIPINF" in listcomp) and ("PLAYLIST" in listcomp) and ("STREAM" in listcomp):   
@@ -59,7 +72,7 @@ class BDROM():
             else:
                 raise RunTimeError("Error: Couldnt find CLIPINF, PLAYLIST, and STREAM directories.")
         else:
-            raise RuntimeError("Error: BDMV directory structure could not be found. Are you certain the BluRay ROOT path exists (i.e. /mnt/ not /mnt/BDMV/)?")
+            raise RuntimeError("Error: BDMV directory structure could not be found. Are you certain the Blu-Ray ROOT path exists (i.e. /mnt/ not /mnt/BDMV/)?")
 
 
     def sizeBDMV(self):
@@ -104,6 +117,15 @@ class BDROM():
                 if s[2].__len__():          # Note the C-Sharp code matches against the actual *.mnv files. I didnt but should verify if such folders contain anything other than that.
                     self.bd_psp = True
                     del s
+                    
+            if os.path.exists((os.path.join(self.dir_bdmv, "META", "DL", "bdmt_eng.xml"))):
+                with open((os.path.join(self.dir_bdmv, "META", "DL", "bdmt_eng.xml")), "rb") as bdmt_eng:
+                    bdmt = bdmt_eng.read()
+                    start = bdmt.index(b"<di:name>")     
+                    end = bdmt.rindex(b"</di:name>")
+                    self.title = bdmt[start+9:end].decode("utf-8")
+
+
         else:
             raise Exception("Instance's dir_root attribute has either not been set or doesnt exist.")
             
@@ -137,7 +159,7 @@ class BDROM():
         
         assert(self.playlistsresults)
         def dsort(k):
-            if not k[1].playlistchapters: # This logic added because there may be a bug with VC-1 video only tracks as evident in Empire Of The Sun 00010.mpls 
+            if not k[1].playlistchapters: # Added as there may be a bug where VC-1 video. As evident in Empire Of The Sun 00010.mpls 
                 return ("0:00:00.000", 0)
             else:
                 v1 = self.convertchaptersecs(timedelta(seconds=k[1].playlistchapters[-1]))
@@ -146,7 +168,7 @@ class BDROM():
          
         # Two sorts because of stable sort properties for the sequential mpls file name.
         self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key= lambda k:k[0]))
-        self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key=dsort, reverse=True))
+        #self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key=dsort, reverse=True))
 
 
     def printBDMV(self, target=None):
@@ -160,7 +182,11 @@ class BDROM():
             for index in range(0, len(mpls.chapterclips)):
                 print(mpls.chapterclips[index].name + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimeout)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].length)))
             print()
-            
+
+
+    def populate_gui():
+            pass
+
             
     @staticmethod
     def listloader(dirpath, ftype):
@@ -184,4 +210,27 @@ class BDROM():
                 s = s + ("%.3f" % (secsdelta.microseconds * .000001)).lstrip("0") 
         return s
         
-    
+
+
+##if __name__ == '__main__':
+##    parser = argparse.ArgumentParser(description="bluinfo.py -- A multi-platform Blu-Ray Metadata Extractor")
+##    parser.add_argument("BDMV_PATH", nargs='+')
+##    parser.add_argument("--gui", action="store_true", help="Graphical User Interface Mode")
+##    parser.add_argument("--json", action="store_true", help="Output as JSON")
+##    parser.add_argument("--mkvtoolnix",  action="store_true", help="Output as MKVToolnix compatible ingestion")
+##
+##    cli_args = parser.parse_args()
+##
+##    # Launch the GUI if the --gui flag was specified. Ignorethe rest  of the commandline processing
+##    if cli_args.gui == True:
+##        pass
+##    else:
+##        args_proc = []
+##        while cli_args.BDMV_PATH:
+##                args_proc.append(BDROM(cli_args.BDMV_PATH.pop()))
+##        args_proc = [  runit(b) for b in arg_proc ]
+                
+            
+
+
+            

@@ -2,6 +2,7 @@ from iso_639_2map import codecnamefunc, altcodecfunc, isolangfunc
 from ts_attrconst import StreamType, VideoFormat, FrameRate, ChannelLayout, SampleRate, AspectRate, AudioMode
 
 class Stream(object):
+
     def __init__(self):
         self.PID = None
         self.streamtype = None
@@ -10,7 +11,6 @@ class Stream(object):
         self.activebitrate = 0
         self.isVBR = False
         self.isInitialized = False
-        self.languagename = "Unknown"                 
         self.isHidden = False
         self.isAudio = False
         self.isVideo = False
@@ -21,22 +21,24 @@ class Stream(object):
         self.packetseconds = 0
         self.angleindex = 0
         self.packetsize = 0
+        self.languagename = None
 
-              
+
 class TSVideoStream(Stream):
            
     def __init__(self):
        super().__init__()
        self.width = "--UNKNOWN--"
        self.height = "--UKNOWN--"
-       self.isInterlaced = "--UNKNOWN--"
        self.frame_rate_enumerator = "--UNKNOWN--"
        self.frame_rate_denominator = "--UNKNOWN--"
        self.aspectratio = "--UNKNOWN--"
        self.encoding_profile = "--UNKNOWN--"
        self.videoformat = "--UNKNOWN--"
        self.framerate = "--UNKNOWN--"
+       self.isInterlaced = "--UNKNOWN--"
        self.isVideo = True
+       
 
     def convertvidformat(self):
         
@@ -189,9 +191,9 @@ class TSAudioStream(Stream):
                     
         return description
 
-
     def __str__(self):
         return "The ID is {}, the language code is {} (most likely references {}), the codec type is {}, the channel description is {}, and the general description is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc(), self.desc())
+
 
 class TSTextStream(Stream):
     def __init__(self):
@@ -221,16 +223,13 @@ class MPLS(object):
         self.filepath = None
         self.filetype = None  # move to function most likely
         self.isInitialized = False
-        self.isCustom = False
         self.isLooped = False
-        self.HiddenTracks = False
         
         self.chapterclips = []
         self.streamclips = []
         
         self.playlistchapters = []  # The chapters here already have their "relative values" calculated. What orig BDInfo puts out too.
         
-        self.streams = {}           
         self.playliststreams = {}
         self.anglestreams = {}
         self.angleclips = []

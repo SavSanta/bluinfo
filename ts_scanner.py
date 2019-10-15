@@ -7,15 +7,14 @@ import ts_streamtypeclass
 from ts_attrconst import StreamType
 from os.path import basename as basename
 from iso_639_2map import isolangfunc         # Converting language codes ISO-639-2 
-
-
+import pdb
 
 def clipfilescan(cpath,cliplists):
     clipfilescanresults = {}
     for target in cliplists:
         fullpath = os.path.join(cpath, target)
         try:
-            f = open(fullpath, 'rb')                                    # opening the file for BINARY reading
+            f = open(fullpath, 'rb')                            # Opening as readable BINARY
             binreadfile = bytes(f.read())                       # I believe we mirror BDINFO itself and read the whole file into the variable. Hence why we only sliced to the 8th bit in the next line.
             if (binreadfile[:8] != b"HDMV0100") and (binreadfile[:8] != b"HDMV0200") and (binreadfile[:8] != b"HDMV0300"):   
                 raise Exception("Exception: CPLI file {} has an unknown filetype {}!".format(fullpath, binreadfile[:8]))    # Because we dont know the file type
@@ -27,7 +26,7 @@ def clipfilescan(cpath,cliplists):
             cliplength = (binreadfile[clipIndex] << 24) + (binreadfile[clipIndex + 1] << 16) + (binreadfile[clipIndex + 2] << 8) + (binreadfile[clipIndex + 3])
 
             clipdata = bytes(cliplength)                                 
-            clipdata = binreadfile[(clipIndex+4):]    #Altered Here because the Csharp version uses Array.Copy and one parameter is length but its cumulative. Since I dont know how they arrived exactly at how many more cumulative bytes to copy I'll just copy the entire rest of the array. So it's different from the Csharp here. I suppose I could do the len(array + math) but nah.
+            clipdata = binreadfile[(clipIndex+4):]
 
             streamscount = clipdata[8]
             streamoffset = 10
@@ -36,14 +35,12 @@ def clipfilescan(cpath,cliplists):
             while streamindex < streamscount:
                 
                 streamPID = ((clipdata[streamoffset] << 8) +  clipdata[streamoffset + 1])
-
                 streamoffset += 2
-
                 streamtype = clipdata[streamoffset + 1]
 
-                #<Figuring Out How To Convert The Switch Statement Here >#  //It looks like I need to reference TSStream.cs for the class that was created and to get the mappings of the hex bytes to ascii names.
                 if (streamtype == StreamType.MVC_VIDEO):
                     stream = ts_streamtypeclass.Stream()
+                    
                 elif (streamtype == StreamType.AVC_VIDEO or streamtype == StreamType.MPEG1_VIDEO or streamtype == StreamType.MPEG2_VIDEO or streamtype == StreamType.VC1_VIDEO):              
                     
                     # Considering the next section this may be redundant but does make it easier to read
@@ -60,8 +57,7 @@ def clipfilescan(cpath,cliplists):
                     # Run this streamtype's specific methods to internally modify some data
                     stream.convertvidformat()
                     stream.convertframerate()
-                    
-                
+
                 elif (streamtype == StreamType.AC3_AUDIO or streamtype == StreamType.AC3_PLUS_AUDIO or streamtype == StreamType.AC3_PLUS_SECONDARY_AUDIO or streamtype == StreamType.AC3_TRUE_HD_AUDIO or streamtype == StreamType.DTS_AUDIO or streamtype == StreamType.DTS_HD_AUDIO or streamtype == StreamType.DTS_HD_MASTER_AUDIO or streamtype == StreamType.DTS_HD_SECONDARY_AUDIO or streamtype == StreamType.LPCM_AUDIO or streamtype == StreamType.MPEG1_AUDIO or streamtype == StreamType.MPEG2_AUDIO):
 
                     # Pull the data into variables
@@ -78,16 +74,14 @@ def clipfilescan(cpath,cliplists):
                     stream.streamtype = streamtype
                     stream.languagename = isolangfunc(stream.languagecode)
 
- 
                 elif (streamtype == StreamType.INTERACTIVE_GRAPHICS or streamtype == StreamType.PRESENTATION_GRAPHICS):
-
+                    pdb.set_trace()
                     stream = ts_streamtypeclass.TSGraphicsStream()
                     languagebytes = clipdata[(streamoffset + 2):3]
                     languagecode = languagebytes.decode("ascii")
                     stream.languagecode = languagecode
                     stream.languagename = isolangfunc(stream.languagecode)
-                    
-                
+
                 elif (streamtype == StreamType.SUBTITLE):
 
                     stream = ts_streamtypeclass.TSTextStream()
@@ -118,7 +112,6 @@ def clipfilescan(cpath,cliplists):
 
 
 
-
 def playlistscan(ppath, playlists, cliplists, streamlists):
     playlistscanresults = {}
 
@@ -134,10 +127,15 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
             def createplayliststream(data, pos):
                 
                 stream = None
-                start = pos[0]
-                headerlength = data[pos[0]+1]
+                #start = pos[0]  # Super unnecessary
+                
+                pos[0] += 1
+                headerlength = readbyte(data, pos)
+
                 headerposition = pos[0]
-                headertype = data[pos[0] + 1]
+                headertype = readbyte(data, pos)
+
+                #print("Headerposition ===>", headerposition, "\n Headerlength ====>", headerlength)
                 
                 pid = 0
                 subpathpid = 0
@@ -147,40 +145,41 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                     pid = readint16(data, pos)
                     
                 elif headertype == 2: 
-                    subpathid = data[pos[0] + 1]
-                    subclipid = data[pos[0] + 1]
+                    subpathid = readbyte(data, pos)
+                    subclipid = readbyte(data, pos)
                     pid = readint16(data, pos)
                 
                 elif headertype == 3: 
-                    subpathid = data[pos[0] + 1]
+                    subpathid = readbyte(data, pos)
                     pid = readint16(data, pos)
                 
                 elif headertype == 4:
-                    subpathid = data[pos[0] + 1]
-                    subclipid = data[pos[0] + 1]
+                    subpathid = readbyte(data, pos)
+                    subclipid = readbyte(data, pos)
                     pid = readint16(data, pos)
                 
                 else:
-                    print("Variable 'headertype' value not recognized. The value is: ", headertype)
+                        print("Variable 'headertype' value not recognized. The value is: ", headertype)
                 
                 pos[0] = headerposition + headerlength
-                streamlength = data[pos[0] + 1];
-                streampos = pos[0]
                 
-                streamtype = data[pos[0] + 1]
+                # Reordered ahead in order retrieve the byte before current pos variable is increased by 1
+                streampos = pos[0]                    
                 
-                # Basically everything below is a slightly modified copy+paste of the CLIPNF portion.
+                streamlength = readbyte(data, pos)
+                streamtype = readbyte(data, pos)
+
+
+                # Slightly modified CLIPNF portion for STN Stream Attributes Table.
                 if (streamtype == StreamType.MVC_VIDEO):
                     stream = ts_streamtypeclass.Stream()
-                elif (streamtype == StreamType.AVC_VIDEO or streamtype == StreamType.MPEG1_VIDEO or streamtype == StreamType.MPEG2_VIDEO or streamtype == StreamType.VC1_VIDEO):              
+                elif (streamtype == StreamType.AVC_VIDEO or streamtype == StreamType.MPEG1_VIDEO or streamtype == StreamType.MPEG2_VIDEO or streamtype == StreamType.VC1_VIDEO or streamtype == StreamType.HEVC_VIDEO):              
+                    videobyte = readbyte(data, pos)
+                    videoFormat = (videobyte >> 4);
+                    frameRate = (videobyte & 0xF);
                                         
-                    videoFormat = (data[pos[0]] >> 4);
-                    frameRate = (data[pos[0]] & 0xF);
-                    aspectRatio = (data[pos[0] +1] >> 4);
-                    
                     stream = ts_streamtypeclass.TSVideoStream()
                     stream.videoformat = videoFormat
-                    stream.aspectratio = aspectRatio
                     stream.framerate = frameRate
                     
                 elif (streamtype == StreamType.AC3_AUDIO or streamtype == StreamType.AC3_PLUS_AUDIO or streamtype == StreamType.AC3_PLUS_SECONDARY_AUDIO or streamtype == StreamType.AC3_TRUE_HD_AUDIO or streamtype == StreamType.DTS_AUDIO or streamtype == StreamType.DTS_HD_AUDIO or streamtype == StreamType.DTS_HD_MASTER_AUDIO or streamtype == StreamType.DTS_HD_SECONDARY_AUDIO or streamtype == StreamType.LPCM_AUDIO or streamtype == StreamType.MPEG1_AUDIO or streamtype == StreamType.MPEG2_AUDIO):
@@ -204,15 +203,15 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                 elif (streamtype == StreamType.SUBTITLE):
 
                     stream = ts_streamtypeclass.TSTextStream()
+                    #char_code =readbyte(data,pos)   #Scala implemenation has this but really appears unnecessary
                     languagecode = readbyte(data, pos, 3)
                     stream.languagecode = languagecode
                     
                 else:
-                    pass
+                    raise Exception("Can't determine StreamType in CreatePlaylist Fuction.")
                     
-                    
-                pos = [streampos + streamlength]
-
+                pos[0] = streampos + streamlength
+                
                 if stream:
                     stream.PID = pid
                     stream.streamtype = streamtype
@@ -233,31 +232,35 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
 
 
             def readbyte(data, pos):
-                return data[pos[0]+1]
+                # tempvar created here because we return the data while increasing the position afterwards since we dont have ++
+                tempvar = data[pos[0]]
+                pos[0] += 1
 
+                return tempvar 
+                
 
             def readstring(data, pos, count):
                 val =  data[pos[0]:(pos[0]+count)]
                 pos[0] += count
                 return val.decode(encoding="utf-8")
                 
-
+            
             pos = [0]
+            
             filetype = readstring(binfiledatas, pos, 8)
 
             playlistoffset = readint32(binfiledatas, pos)
             chaptersoffset = readint32(binfiledatas, pos)
             extensionoffset = readint32(binfiledatas, pos)
 
-
             pos = [playlistoffset]
             playlistlength = readint32(binfiledatas, pos)
             playlistreserved = readint16(binfiledatas, pos)
 
-
             itemcount = readint16(binfiledatas, pos)
             subitemcount = readint16(binfiledatas,pos)
             itemindex = 0
+
             
             GenPlaylist = ts_streamtypeclass.MPLS()
             
@@ -266,16 +269,16 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                 itemlength = readint16(binfiledatas, pos)
                 itemname = readstring(binfiledatas, pos, 5)
                 itemtype = readstring(binfiledatas, pos, 4)
-
+                
                 streamfilename = itemname + ".m2ts"
                 if streamfilename in streamlists:               # This suite might be totally useless for Python
-                                      streeeemFile = streamlists.index(streamfilename)      # clever me using the index method lol
+                                      streeeemFile = streamlists.index(streamfilename)      # Using index method returns integer
                 if streeeemFile == None:
                         print("Debug Error. Missing file in reference:", streamfilename)
 
                 streamclipname = itemname + ".clpi" 
                 if streamclipname in cliplists:               # This suite might be totally useless for Python
-                                      streeeemClipFile = cliplists.index(streamclipname)      # clever me using the index method lol
+                                      streeeemClipFile = cliplists.index(streamclipname)      # Using index method returns integer
                 if streeeemClipFile == None:
                         print("Debug Error. Playlist referenced missing CLPI file in reference:", streamfilename, streamclipname)
 
@@ -309,7 +312,7 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                 streamClip.relativetimein = GenPlaylist.totallength     
                 streamClip.relativetimeout = streamClip.relativetimein + streamClip.length
 
-                # The naming is so confusing and I dont know how to add this junk yet so. On-The-Fly Variable !
+                # GenPlayList needs a better name
                 GenPlaylist.streamclips.append(streamClip)
                 GenPlaylist.chapterclips.append(streamClip)
 
@@ -325,14 +328,13 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                                 angletype = readstring(data, pos, 4)
                                 pos[0] +=1
 
-                                
                                 anglefilename = anglename + ".m2ts"
                                 if anglefilename in streamlists:               # This suite might be totally useless for Python
                                                       angleeeeFile = streamlists.index(anglefilename)      # clever me using the index method lol
                                 if angleeeeFile == None:
                                         print("Debug Error. Missing M2TS ANGLE file in reference:", anglefilename)
 
-                                angleclipname= anglename + ".clpi"
+                                angleclipname = anglename + ".clpi"
                                 if angleclipname in cliplists:               # This suite might be totally useless for Python
                                         anglestreeeemClipFile = cliplists.index(angleclipname)      # clever me using the index method lol
 
@@ -350,63 +352,65 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                                 
                                 angle += 1
 
-                        if (angles - 1) > anglecount:    # I HATE THESE ANGLES. Few BDMVs even support them. Still make sure this is accurate though
+                        if (angles - 1) > anglecount:    # Abhor ANGLES. Few BDMVs even support them. Still need to ensure this is accurate though
                                 anglecount = angles - 1
 
-                
                 streaminfolength = readint16(binfiledatas, pos)
-                pos[0] += 2
-                streamcountvideo = binfiledatas[pos[0]+1]
-                streamcountaudio = binfiledatas[pos[0]+1]
-                streamcountpg = binfiledatas[pos[0]+1]
-                streamcountig = binfiledatas[pos[0]+1]
-                streamcountsecondaryaudio = binfiledatas[pos[0]+1]
-                streamcountsecondaryvideo = binfiledatas[pos[0]+1]
-                streamcountpip = binfiledatas[pos[0]+1]
+                pos[0] += 2                                                     #Move position ahead over 2 reserved bytes
+                streamcountvideo = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountaudio = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountpg = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountig = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountsecondaryaudio = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountsecondaryvideo = binfiledatas[pos[0]]
+                pos[0] += 1
+                streamcountpip = binfiledatas[pos[0]]
                 pos[0] += 5
                 
-                print("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8}".format(basename(f.name),streamfilename, streamcountvideo, streamcountaudio, streamcountpg, streamcountig, streamcountsecondaryaudio, streamcountsecondaryvideo, streamcountpip))
-                pos[0]+= itemlength - (pos[0] - itemstart) + 2
-                
+                print("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8}".format(basename(f.name),streamfilename, streamcountvideo, streamcountaudio, streamcountpg, streamcountig, streamcountsecondaryaudio, streamcountsecondaryvideo, streamcountpip))                 
                 
                 for a in range(0,streamcountvideo):
                     debug_stream =  createplayliststream(binfiledatas, pos)
                     if debug_stream:
-                        GenPlaylist.playliststreams[stream.PID] = debug_stream
+                        GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
                                                         
                 for a in range(0,streamcountaudio):
+                    #pdb.set_trace()
                     debug_stream =  createplayliststream(binfiledatas, pos)
                     if debug_stream:
-                        GenPlaylist.playliststreams[stream.PID] = debug_stream
+                        GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
                 
                 for a in range(0,streamcountpg):
                     debug_stream =  createplayliststream(binfiledatas, pos)
                     if debug_stream:
-                        GenPlaylist.playliststreams[stream.PID] = debug_stream
+                        GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
                 
                 for a in range(0,streamcountig):
                     debug_stream =  createplayliststream(binfiledatas, pos)
                     if debug_stream:
-                        GenPlaylist.playliststreams[stream.PID] = debug_stream
+                        GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
                 
                 for a in range(0,streamcountsecondaryaudio):
                     debug_stream =  createplayliststream(binfiledatas, pos)
                     if debug_stream:
-                        GenPlaylist.playliststreams[stream.PID] = debug_stream
-                    pos[0] += 2
+                        GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
+                        pos[0] += 2
                 
                 for a in range(0,streamcountsecondaryvideo):
                     debug_stream =  createplayliststream(binfiledatas, pos)
                     if debug_stream:
-                        GenPlaylist.playliststreams[stream.PID] = debug_stream
-                
-                
-                pos[0] += 6
-            
+                        GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
+                        pos[0] += 6
+
+
                 pos[0] += itemlength - (pos[0] - itemstart) + 2
                 
-            
-            # End for-range Loop - Do the variable (esp streamclip and xxStreamClipsxx still exist            
+            # End for-range Loops            
             
             pos[0] = chaptersoffset + 4
             chaptercount = readint16(binfiledatas, pos)
@@ -422,7 +426,6 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                     streamClip = GenPlaylist.chapterclips[streamfileindex]
                     
                     chaptersecs = chaptertime / 45000
-                    
                     relativesecs = chaptersecs - streamClip.timein + streamClip.relativetimein
                     
                     if (GenPlaylist.totallength - relativesecs > 1.0):
@@ -441,4 +444,3 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
             f.close()
 
     return playlistscanresults
-        
