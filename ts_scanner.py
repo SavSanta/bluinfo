@@ -35,7 +35,10 @@ def clipfilescan(cpath,cliplists):
             while streamindex < streamscount:
                 
                 streamPID = ((clipdata[streamoffset] << 8) +  clipdata[streamoffset + 1])
+
+                # Moves offset marker to sit on the length of the StreamCodingInfo section
                 streamoffset += 2
+
                 streamtype = clipdata[streamoffset + 1]
 
                 if (streamtype == StreamType.MVC_VIDEO):
@@ -61,7 +64,7 @@ def clipfilescan(cpath,cliplists):
                 elif (streamtype == StreamType.AC3_AUDIO or streamtype == StreamType.AC3_PLUS_AUDIO or streamtype == StreamType.AC3_PLUS_SECONDARY_AUDIO or streamtype == StreamType.AC3_TRUE_HD_AUDIO or streamtype == StreamType.DTS_AUDIO or streamtype == StreamType.DTS_HD_AUDIO or streamtype == StreamType.DTS_HD_MASTER_AUDIO or streamtype == StreamType.DTS_HD_SECONDARY_AUDIO or streamtype == StreamType.LPCM_AUDIO or streamtype == StreamType.MPEG1_AUDIO or streamtype == StreamType.MPEG2_AUDIO):
 
                     # Pull the data into variables
-                    languagebytes = clipdata[streamoffset + 3:((streamoffset + 3) + 3)]
+                    languagebytes = clipdata[(streamoffset + 3):(streamoffset + 6)]
                     languagecode = languagebytes.decode("ascii")
                     channellayout = (clipdata[streamoffset + 2] >> 4)           
                     samplerate = (clipdata[streamoffset + 2] & 0xF)
@@ -73,33 +76,26 @@ def clipfilescan(cpath,cliplists):
                     stream.samplerate = stream.convertsamplerate(samplerate)
                     stream.streamtype = streamtype
                     stream.languagename = isolangfunc(stream.languagecode)
-                    del languagebytes
-                    del languagecode
 
                 elif (streamtype == StreamType.INTERACTIVE_GRAPHICS or streamtype == StreamType.PRESENTATION_GRAPHICS):
                     stream = ts_streamtypeclass.TSGraphicsStream()
-                    languagebytes = clipdata[(streamoffset + 2):3]
+                    languagebytes = clipdata[(streamoffset + 2):(streamoffset + 5)]
                     languagecode = languagebytes.decode("ascii")
                     stream.languagecode = languagecode
                     stream.languagename = isolangfunc(stream.languagecode)
-                    del languagebytes
-                    del languagecode
 
                 elif (streamtype == StreamType.SUBTITLE):
 
                     stream = ts_streamtypeclass.TSTextStream()
-                    languagebytes = clipdata[streamoffset + 3:((streamoffset + 3) + 3)]
+                    languagebytes = clipdata[(streamoffset + 3):(streamoffset + 6)]
                     languagecode = languagebytes.decode("ascii")
                     stream.languagecode = languagecode
                     stream.languagename = isolangfunc(stream.languagecode)
-                    del languagebytes
-                    del languagecode
                     
                 if stream != None:
                     stream.PID = streamPID
                     stream.streamtype = streamtype
                     allstreams[streamindex] = stream
-
                     
                 streamindex +=1
                 streamoffset += clipdata[streamoffset] + 1
