@@ -107,13 +107,13 @@ class TSVideoStream(Stream):
             description += "2:21 / "
         if self.encoding_profile != None:                
             description += self.encoding_profile + " / "
-        if description.endswith(' / '): # Why the heck is this in here I have no idea. Maybe if it somethow has to remove a stray " / " ending. Seems odd, but whatever
+        if description.endswith(' / '):
             description = description[:(description.__len__() - 3)]                
         return description
     
 
     def __str__(self):
-        return "The ID is {}, the codec type is {}, and the general description is {}. The stream/track number will hopefully be added here".format(self.PID, altcodecfunc(self.streamtype), self.desc())
+        return "PID: {}, Codec Type: {}, Description: {}".format(self.PID, altcodecfunc(self.streamtype), self.desc)
 
 
 class TSAudioStream(Stream):
@@ -131,7 +131,7 @@ class TSAudioStream(Stream):
         self.isAudio = True
 
 
-    def convertsamplerate(self, extsamplerate):                        # This is confusing and interesting. I have a Stream object in the main code. It will get set by this function call in the main code. Though, if it is undefined then later on it could mess up the other code (like method function desc())
+    def convertsamplerate(self, extsamplerate):
         if extsamplerate == SampleRate.SAMPLERATE_48:
             return 48000
         elif extsamplerate == SampleRate.SAMPLERATE_96 or extsamplerate == SampleRate.SAMPLERATE_48_96 :
@@ -170,7 +170,7 @@ class TSAudioStream(Stream):
         if self.samplerate > 0:
             description += " / {0} kHz".format((self.samplerate / 1000))
         if self.bitrate > 0:
-            description += "/ {0} kbps".format((self.bitrate / 1000)) # Original source uses a round() func, but I think may not need for Python math
+            description += "/ {0} kbps".format((self.bitrate / 1000))
         if self.bitdepth > 0:
             description += "/ {0}-bit".format(self.bitdepth)
         if self.dialnorm !=0:
@@ -180,9 +180,9 @@ class TSAudioStream(Stream):
                 description += " /Dual Mono"
             elif self.audiomode == AudioMode.Surround:
                 description += " / Dolby Surround"
-        if description.endswith(' / '): # Why the heck is this in here I have no idea. Maybe if it somehow has to remove a stray " / " ending. Seems odd, but whatever
+        if description.endswith(' / '):
             description = description[:(description.__len__() - 3)]
-        if self.corestream != None:                                                                         # Here I may need to investigate where Csharp source Corestream information actually got passed.
+        if self.corestream != None:                                     # Here I may need to investigate where Csharp source Corestream information actually got passed.
             corecodec = ""
             if self.corecodec == StreamType.AC3_Audio :
                     corecodec = "AC3 Embedded"
@@ -192,7 +192,7 @@ class TSAudioStream(Stream):
         return description
 
     def __str__(self):
-        return "The ID is {}, the language code is {} (most likely references {}), the codec type is {}, the channel description is {}, and the general description is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc(), self.desc())
+        return "PID: {}, Codec Type: {}, Channel Description is {}, Description: {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc, self.desc)
 
 
 class TSTextStream(Stream):
@@ -202,7 +202,7 @@ class TSTextStream(Stream):
         self.isText = True
 
     def __str__(self):        
-        return "The ID is {}, the language code is {} (most likely references {}) and the  codec is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
+        return "PID: {}, Language Code: {}, Language Name: {}, Codec Type {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
         
 
 class TSGraphicsStream(Stream):
@@ -212,7 +212,7 @@ class TSGraphicsStream(Stream):
         self.isGraphic = True
 
     def __str__(self):        
-       return "The ID is {}, the language code is {} (most likely references {}) and the codec is {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
+       return "PID: {}, Language Code: {}, Language Name: {}, Codec Type {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
         
 
 # Playlist Class Structure
