@@ -6,7 +6,6 @@ class Stream(object):
     def __init__(self):
         self.PID = None
         self.streamtype = None
-        self.descriptors = None
         self.bitrate = 0
         self.activebitrate = 0
         self.isVBR = False
@@ -28,10 +27,10 @@ class TSVideoStream(Stream):
            
     def __init__(self):
        super().__init__()
-       self.width = "--UNKNOWN--"
-       self.height = "--UKNOWN--"
-       self.frame_rate_enumerator = "--UNKNOWN--"
-       self.frame_rate_denominator = "--UNKNOWN--"
+       self.width = 0
+       self.height = 0
+       self.frame_rate_enumerator = 0
+       self.frame_rate_denominator = 0
        self.aspectratio = "--UNKNOWN--"
        self.encoding_profile = "--UNKNOWN--"
        self.videoformat = "--UNKNOWN--"
@@ -92,7 +91,7 @@ class TSVideoStream(Stream):
     @property
     def desc(self):
         description = ""         
-        if self.height > 0:
+        if int(self.height) > 0:
             description += "{0}{1} / ".format(self.height, "i" if self.isInterlaced else "p") # Note ternary conditional
         if (self.frame_rate_enumerator > 0 and self.frame_rate_denominator > 0):                
             if (self.frame_rate_enumerator % self.frame_rate_denominator == 0):                    
@@ -110,10 +109,12 @@ class TSVideoStream(Stream):
         if description.endswith(' / '):
             description = description[:(description.__len__() - 3)]                
         return description
-    
 
     def __str__(self):
         return "PID: {}, Codec Type: {}, Description: {}".format(self.PID, altcodecfunc(self.streamtype), self.desc)
+
+    def __repr__(self):
+        return "VideoStream | PID: {}, Codec Type: {}, Description: {}".format(self.PID, altcodecfunc(self.streamtype), self.desc)
 
 
 class TSAudioStream(Stream):
@@ -121,15 +122,14 @@ class TSAudioStream(Stream):
     def __init__(self):
         super().__init__()
         self.samplerate = 0
-        self.channelcount = 0
         self.bitdepth = 0
+        self.channelcount = 0
         self.lfe = 0
         self.dialnorm = 0
         self.audiomode = None
         self.corestream =  None
         self.channellayout = None
         self.isAudio = True
-
 
     def convertsamplerate(self, extsamplerate):
         if extsamplerate == SampleRate.SAMPLERATE_48:
@@ -143,17 +143,17 @@ class TSAudioStream(Stream):
 
 
     def channeldesc(self):
-        if ( self.channellayout == ChannelLayout.CHANNELLAYOUT_MONO and self.channelcount == 2 ):
+        if (self.channellayout == ChannelLayout.CHANNELLAYOUT_MONO and self.channelcount == 2):
             pass
 
         description = ""
         if self.channelcount > 0:
             description += "{0:D}.{1:d}".format(self.channelcount, self.lfe)
-        elif ChannelLayout.CHANNELLAYOUT_MONO:
+        elif self.channellayout == ChannelLayout.CHANNELLAYOUT_MONO:
             description += "1.0"
-        elif ChannelLayout.CHANNELLAYOUT_STEREO:
+        elif self.channellayout == ChannelLayout.CHANNELLAYOUT_STEREO:
             description += "2.0"
-        elif ChannelLayout.CHANNELLAYOUT_MULTI:
+        elif self.channellayout == ChannelLayout.CHANNELLAYOUT_MULTI:
             description += "5.1"
 
         if self.audiomode == AudioMode.Extended:
@@ -165,7 +165,7 @@ class TSAudioStream(Stream):
 
     @property
     def desc(self):
-        description = self.channeldesc()   # I wonder if I will need to change this to TSAudioStream.channeldesc(). However this is just to mimic the C Sharp since using accessors in Python is complicated
+        description = self.channeldesc()   # Wary of recusions
 
         if self.samplerate > 0:
             description += " / {0} kHz".format((self.samplerate / 1000))
@@ -173,7 +173,7 @@ class TSAudioStream(Stream):
             description += "/ {0} kbps".format((self.bitrate / 1000))
         if self.bitdepth > 0:
             description += "/ {0}-bit".format(self.bitdepth)
-        if self.dialnorm !=0:
+        if self.dialnorm != 0:
             description += "/ DN {0}db".format(self.dialnorm)
         if self.channelcount == 2:
             if self.audiomode == AudioMode.DualMono:
@@ -192,7 +192,10 @@ class TSAudioStream(Stream):
         return description
 
     def __str__(self):
-        return "PID: {}, Codec Type: {}, Channel Description is {}, Description: {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc, self.desc)
+        return "PID: {}, Language Code: {}, Language Name: {}, Alt Codec: {}, Channels: {}, Description {} ".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc, self.desc)
+
+    def __repr__(self):
+        return "AudioStream | PID: {}, Language Code: {}, Language Name: {}, Alt Codec: {}, Description {} ".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.desc)
 
 
 class TSTextStream(Stream):
@@ -204,6 +207,9 @@ class TSTextStream(Stream):
     def __str__(self):        
         return "PID: {}, Language Code: {}, Language Name: {}, Codec Type {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
         
+    def __repr__(self):        
+        return "TextSubtitleStream | PID: {}, Language Code: {}, Language Name: {}, Codec Type {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
+
 
 class TSGraphicsStream(Stream):
     def __init__(self):
@@ -213,6 +219,9 @@ class TSGraphicsStream(Stream):
 
     def __str__(self):        
        return "PID: {}, Language Code: {}, Language Name: {}, Codec Type {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
+
+    def __repr__(self):        
+       return "GraphicsSubtitleStream | PID: {}, Language Code: {}, Language Name: {}, Codec Type {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
         
 
 # Playlist Class Structure
@@ -220,6 +229,7 @@ class TSGraphicsStream(Stream):
 class MPLS(object):
     
     def __init__(self):
+        self.summary
         self.filepath = None
         self.filetype = None  # move to function most likely
         self.isInitialized = False
@@ -234,13 +244,7 @@ class MPLS(object):
         self.anglestreams = {}
         self.angleclips = []
         self.anglecount = 0
-        
-        self.sortedstreams = []
-        self.videostreams = []
-        self.audiostreams = []
-        self.textstreams = []
-        self.graphicsstreams = []
-        
+                
     @property
     def totallength(self):
         val = 0
@@ -252,15 +256,5 @@ class MPLS(object):
 class StreamClip(object):
     def __init__(self):
         self.chapters = []
-
-    
-
-    
-    
-    
-    
-            
-    
         
         
-    
