@@ -2,22 +2,20 @@
 
 import sys                              # St&ard. Also good for platform values
 import os                                # Portability module
-import iso_639_2map         # Converting language codes ISO-639-2 
 import ts_streamtypeclass
 from ts_attrconst import StreamType
 from os.path import basename as basename
 from iso_639_2map import isolangfunc         # Converting language codes ISO-639-2 
-import pdb
 
 def clipfilescan(cpath,cliplists):
     clipfilescanresults = {}
     for target in cliplists:
         fullpath = os.path.join(cpath, target)
         try:
-            f = open(fullpath, 'rb')                            # Opening as readable BINARY
-            binreadfile = bytes(f.read())                       # I believe we mirror BDINFO itself and read the whole file into the variable. Hence why we only sliced to the 8th bit in the next line.
+            f = open(fullpath, 'rb')
+            binreadfile = bytes(f.read())
             if (binreadfile[:8] != b"HDMV0100") and (binreadfile[:8] != b"HDMV0200") and (binreadfile[:8] != b"HDMV0300"):   
-                raise Exception("Exception: CPLI file {} has an unknown filetype {}!".format(fullpath, binreadfile[:8]))    # Because we dont know the file type
+                raise Exception("Exception: CPLI file {} has an unknown filetype {}!".format(fullpath, binreadfile[:8]))
             
             allstreams = {}
             allstreams["FILE"] = fullpath
@@ -25,9 +23,11 @@ def clipfilescan(cpath,cliplists):
             clipIndex = (binreadfile[12] << 24) + (binreadfile[13] << 16) + (binreadfile[14] << 8) + (binreadfile[15])
             cliplength = (binreadfile[clipIndex] << 24) + (binreadfile[clipIndex + 1] << 16) + (binreadfile[clipIndex + 2] << 8) + (binreadfile[clipIndex + 3])
 
-            clipdata = bytes(cliplength)                                 
+            # Copy only relevant streams data from CLPI and delete bindata                                 
             clipdata = binreadfile[(clipIndex+4):]
+            del binreadfile
 
+            # Get num of streams and their offset
             streamscount = clipdata[8]
             streamoffset = 10
             streamindex = 0
@@ -73,14 +73,17 @@ def clipfilescan(cpath,cliplists):
                     stream.samplerate = stream.convertsamplerate(samplerate)
                     stream.streamtype = streamtype
                     stream.languagename = isolangfunc(stream.languagecode)
+                    del languagebytes
+                    del languagecode
 
                 elif (streamtype == StreamType.INTERACTIVE_GRAPHICS or streamtype == StreamType.PRESENTATION_GRAPHICS):
-                    pdb.set_trace()
                     stream = ts_streamtypeclass.TSGraphicsStream()
                     languagebytes = clipdata[(streamoffset + 2):3]
                     languagecode = languagebytes.decode("ascii")
                     stream.languagecode = languagecode
                     stream.languagename = isolangfunc(stream.languagecode)
+                    del languagebytes
+                    del languagecode
 
                 elif (streamtype == StreamType.SUBTITLE):
 
@@ -89,11 +92,14 @@ def clipfilescan(cpath,cliplists):
                     languagecode = languagebytes.decode("ascii")
                     stream.languagecode = languagecode
                     stream.languagename = isolangfunc(stream.languagecode)
+                    del languagebytes
+                    del languagecode
                     
                 if stream != None:
                     stream.PID = streamPID
                     stream.streamtype = streamtype
                     allstreams[streamindex] = stream
+
                     
                 streamindex +=1
                 streamoffset += clipdata[streamoffset] + 1
@@ -102,11 +108,6 @@ def clipfilescan(cpath,cliplists):
         except(IOError, FileNotFoundError):
             print("Exception: Error Opening File for Reading: ", fullpath)
         finally:
-            '''## Remove After Testing ##
-                for item in allstreams:
-                print("This is allstreams item/key value of: ", item)
-                print(allstreams[item])
-                '''
             f.close()
     return clipfilescanresults
 
@@ -118,10 +119,10 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
     for target in playlists:
         fullpath = os.path.join(ppath, target)
         try:
-            f = open(fullpath, 'rb')                                    # opening the file for BINARY reading
-            binfiledatas = bytes(f.read())                       # I believe we mirror BDINFO itself and read the whole file into the variable. Hence why we only slice to the 8 bit in the next line.
+            f = open(fullpath, 'rb')
+            binfiledatas = bytes(f.read())
             if (binfiledatas[:8] != b"MPLS0100") and (binfiledatas[:8] != b"MPLS0200") and (binfiledatas[:8] != b"MPLS0300"):   
-                raise Exception("Exception: MPLS file {} is of an unsupported playlist type {}!".format(fullpath, binfiledatas[:8]))    # Because we dont know the file type
+                raise Exception("Exception: MPLS file {} is of an unsupported playlist type {}!".format(fullpath, binfiledatas[:8]))
 
             
             def createplayliststream(data, pos):
@@ -380,7 +381,6 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                         GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
                                                         
                 for a in range(0,streamcountaudio):
-                    #pdb.set_trace()
                     debug_stream =  createplayliststream(binfiledatas, pos)
                     if debug_stream:
                         GenPlaylist.playliststreams[debug_stream.PID] = debug_stream
