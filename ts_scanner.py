@@ -258,7 +258,7 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
             subitemcount = readint16(binfiledatas,pos)
             itemindex = 0
 
-            
+
             GenPlaylist = ts_streamtypeclass.MPLS()
             
             for itemindex in range(itemcount):
@@ -309,7 +309,7 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                 streamClip.relativetimein = GenPlaylist.totallength     
                 streamClip.relativetimeout = streamClip.relativetimein + streamClip.length
 
-                # GenPlayList needs a better name
+                # GenPlaylist needs a better name
                 GenPlaylist.streamclips.append(streamClip)
                 GenPlaylist.chapterclips.append(streamClip)
 
@@ -369,7 +369,8 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                 streamcountpip = binfiledatas[pos[0]]
                 pos[0] += 5
                 
-                print("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8}".format(basename(f.name),streamfilename, streamcountvideo, streamcountaudio, streamcountpg, streamcountig, streamcountsecondaryaudio, streamcountsecondaryvideo, streamcountpip))                 
+                GenPlaylist.summary = "{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8}".format(basename(f.name),streamfilename, streamcountvideo, streamcountaudio, streamcountpg, streamcountig, streamcountsecondaryaudio, streamcountsecondaryvideo, streamcountpip)
+                print(GenPlaylist.summary)                 
                 
                 for a in range(0,streamcountvideo):
                     debug_stream =  createplayliststream(binfiledatas, pos)
@@ -406,7 +407,7 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
 
                 pos[0] += itemlength - (pos[0] - itemstart) + 2
                 
-            # End for-range Loops            
+            # End of for-range Loops            
             
             pos[0] = chaptersoffset + 4
             chaptercount = readint16(binfiledatas, pos)
