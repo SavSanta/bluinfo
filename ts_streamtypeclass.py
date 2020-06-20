@@ -229,7 +229,7 @@ class TSGraphicsStream(Stream):
 class MPLS(object):
     
     def __init__(self):
-        self.summary
+        self.summary = None
         self.filepath = None
         self.filetype = None  # move to function most likely
         self.isInitialized = False
