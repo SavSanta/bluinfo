@@ -99,6 +99,7 @@ class BDROM():
                 self.bd_plus = True
         return
 
+
     def specialBDMV(self):
         if (self.dir_root): 
             
@@ -125,7 +126,6 @@ class BDROM():
                     start = bdmt.index(b"<di:name>")     
                     end = bdmt.rindex(b"</di:name>")
                     self.title = bdmt[start+9:end].decode("utf-8")
-
 
         else:
             raise Exception("Instance's dir_root attribute has either not been set or doesnt exist.")
@@ -170,15 +170,13 @@ class BDROM():
         for file, mpls in self.playlistsresults:
             print("PLAYLIST: ", file)
             print("======================")
-            print("FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t' + "DURATION")
+            print("FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t\t' + "DURATION")
             for index in range(0, len(mpls.chapterclips)):
                 print(mpls.chapterclips[index].name + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimeout)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].length)))
             print()
 
-
     def populate_gui():
             pass
-
             
     @staticmethod
     def listloader(dirpath, ftype):

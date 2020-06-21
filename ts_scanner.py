@@ -4,7 +4,7 @@ import sys                              # St&ard. Also good for platform values
 import os                                # Portability module
 import ts_streamtypeclass
 from ts_attrconst import StreamType
-from os.path import basename as basename
+from os.path import basename
 from iso_639_2map import isolangfunc         # Converting language codes ISO-639-2 
 
 def clipfilescan(cpath,cliplists):

@@ -511,7 +511,7 @@ StreamType.SUBTITLE:  "SUB",
  })
 
 # The kicker should be the objects value optionally passed to determine if it is Extended Audio Mode from the AC3 or DTS formats above
-def codecnamefunc(threecode, kicker=666): 
+def codecnamefunc(threecode, kicker=666):
     if threecode == StreamType.AC3_AUDIO:
         if kicker == AudioMode.Extended:
             return "Dolby Digital EX Audio"
@@ -524,7 +524,7 @@ def codecnamefunc(threecode, kicker=666):
             return "DTS Audio"
     else:
         return codenamedict[threecode]
-    
+
 
 def altcodecfunc(threecode):
     return altcodecdict[threecode]
@@ -532,10 +532,3 @@ def altcodecfunc(threecode):
 
 def isolangfunc(threecode):
     return isolangdict[threecode]
-
-
-
-    
-    
-        
-    

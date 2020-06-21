@@ -200,6 +200,8 @@ class TSAudioStream(Stream):
         return "AudioStream | PID: {}, Language Code: {}, Language Name: {}, Alt Codec: {}, Description {} ".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.desc)
 
 
+
+
 class TSTextStream(Stream):
     def __init__(self):
         self.isVBR = True
@@ -226,8 +228,8 @@ class TSGraphicsStream(Stream):
        return "GraphicsSubtitleStream | PID: {}, Language Code: {}, Language Name: {}, Codec Type {}".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype))
         
 
-# Playlist Class Structure
 
+# Playlist Class Structure
 class MPLS(object):
     
     def __init__(self):
