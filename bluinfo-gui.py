@@ -5,10 +5,11 @@ __author__ = "SavSanta (Ru Uba)"
 
 import tkinter
 from tkinter import ttk, filedialog
+from bluinfo import BDROM
 from tkinter.constants import *
 
 
-class Bluinfo(tkinter.Tk):
+class BluinfoApp(tkinter.Tk):
 
     # GUI Function Definitions
     def quit(self, event=None):
@@ -101,7 +102,7 @@ class Bluinfo(tkinter.Tk):
         # May need to implement checkbox style someone made here https://github.com/RedFantom/s/blob/master/s/checkboxtreeview.py
         # See also treeview_multicolumn.py
         # Also https://groups.google.com/forum/#!topic/comp.lang.tcl/VwG4_7-1538
-        self.playlist_col = [ "Playlist", "File Group", "Length", "Size" ]
+        self.playlist_col = [ "Playlist", "Length", "Size" ]
         self.playlistbox = ttk.Treeview(self.three, show="headings", columns=self.playlist_col, selectmode=EXTENDED, height=7)
 
         # Add appropriate headings text to each column.
@@ -151,7 +152,7 @@ class Bluinfo(tkinter.Tk):
         self.six = tkinter.Frame(self)
         self.six.pack(side=TOP, fill=X, pady=1)
 
-        # Add sixthleve textbox and scrollbar
+        # Add sixthlevel textbox and scrollbar
         self.info_text = tkinter.Text(self.six, background="lightblue", borderwidth=3, state=DISABLED, height=8)
         self.six_scroll = ttk.Scrollbar(self.six, orient=VERTICAL)
         self.info_text.configure(yscrollcommand=self.six_scroll.set)
@@ -207,5 +208,5 @@ class Bluinfo(tkinter.Tk):
 
 
 if __name__ == '__main__':
-    test = Bluinfo()
+    test = BluinfoApp()
     test.mainloop()
