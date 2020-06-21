@@ -4,12 +4,11 @@ __version__ = 0.7
 __author__ = "SavSanta (Ru Uba)"
 
 import tkinter
-import tkinter as tk
 from tkinter import ttk, filedialog
 from tkinter.constants import *
 
 
-class Bluinfo(tk.Tk):
+class Bluinfo(tkinter.Tk):
 
     # GUI Function Definitions
     def quit(self, event=None):
@@ -40,7 +39,7 @@ class Bluinfo(tk.Tk):
 
     def __init__(self):
         
-        tk.Tk.__init__(self)
+        tkinter.Tk.__init__(self)
         
         # Program Version or Generica
         #self.configure({'padx':10})
@@ -205,3 +204,8 @@ class Bluinfo(tk.Tk):
 # ~ info_text.config(state=NORMAL)
 # ~ info_text.insert(END, lorem)
 # ~ info_text.config(state=DISABLED)
+
+
+if __main__ == '__name__':
+    test = Bluinfo()
+    test.mainloop()
