@@ -1,5 +1,7 @@
 from iso_639_2map import codecnamefunc, altcodecfunc, isolangfunc
 from ts_attrconst import StreamType, VideoFormat, FrameRate, ChannelLayout, SampleRate, AspectRate, AudioMode
+from bluinfo import BDROM
+from datetime import timedelta
 
 class Stream(object):
 
@@ -256,7 +258,9 @@ class MPLS(object):
             self.summary['IG'],
             self.summary['2A'],
             self.summary['2V'],
-            self.summary['PIP']))
+            self.summary['PIP'],
+            BDROM.convertchaptersecs(timedelta(seconds=self.summary['duration']))))                 
+
                 
     @property
     def totallength(self):
