@@ -244,6 +244,19 @@ class MPLS(object):
         self.anglestreams = {}
         self.angleclips = []
         self.anglecount = 0
+
+
+    def __str__(self):
+        return ("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8} - Total Length {9}".format(
+            self.summary['playlist'],
+            self.summary['streamfile'],
+            self.summary['V'],
+            self.summary['A'],
+            self.summary['PG'],
+            self.summary['IG'],
+            self.summary['2A'],
+            self.summary['2V'],
+            self.summary['PIP']))
                 
     @property
     def totallength(self):

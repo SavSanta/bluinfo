@@ -369,8 +369,18 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                 streamcountpip = binfiledatas[pos[0]]
                 pos[0] += 5
                 
-                GenPlaylist.summary = "{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8}".format(basename(f.name),streamfilename, streamcountvideo, streamcountaudio, streamcountpg, streamcountig, streamcountsecondaryaudio, streamcountsecondaryvideo, streamcountpip)
-                print(GenPlaylist.summary)                 
+                GenPlaylist.summary = { 'playlist': basename(f.name),
+                                        'streamfile' : streamfilename,
+                                        'V': streamcountvideo,
+                                        'A':streamcountaudio,
+                                        'PG': streamcountpg,
+                                        'IG': streamcountig,
+                                        '2A' :streamcountsecondaryaudio,
+                                        '2V': streamcountsecondaryvideo,
+                                        'PIP': streamcountpip
+                                        }
+                #print("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8}".format(basename(f.name),streamfilename, streamcountvideo, streamcountaudio, streamcountpg, streamcountig, streamcountsecondaryaudio, streamcountsecondaryvideo, streamcountpip))
+                print(GenPlaylist)
                 
                 for a in range(0,streamcountvideo):
                     debug_stream =  createplayliststream(binfiledatas, pos)
