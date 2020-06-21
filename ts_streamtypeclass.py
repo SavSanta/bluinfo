@@ -249,7 +249,7 @@ class MPLS(object):
 
 
     def __str__(self):
-        return ("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8} - Total Length {9}".format(
+        return ("{0}:{1} -> V:{2} A:{3} PG:{4} IG:{5} 2A:{6} 2V:{7} PIP:{8} -> Duration: {9}".format(
             self.summary['playlist'],
             self.summary['streamfile'],
             self.summary['V'],
