@@ -206,6 +206,6 @@ class Bluinfo(tkinter.Tk):
 # ~ info_text.config(state=DISABLED)
 
 
-if __main__ == '__name__':
+if __name__ == '__main__':
     test = Bluinfo()
     test.mainloop()
