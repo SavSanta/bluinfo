@@ -7,7 +7,6 @@ import argparse                 # For commandline parsing. ( may need to look in
 import tkinter                   # For the GUI that some will say is undoubtedbly ugly.
 import ts_scanner as ScanTask
 from datetime import timedelta         # date and date conversions for logs
-from collections import OrderedDict
 
 __version__ = "0.7"
 __author__ = "SavSanta (Ru Uba)"
@@ -159,7 +158,7 @@ class BDROM():
         # TODO: Test to see if this still works with where VC-1 video bug. As evident in Empire Of The Sun 00010.mpls
 
         # Sort the playlists and attempt to "guess the main title" which should go first.
-        #self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key= lambda k: k[1].summary['duration'], reverse=True))
+        #self.playlistsresults = sorted(x.playlistsresults.items(), key= lambda k: k[1].summary['duration'], reverse=True)
         self.playlistsresults = sorted(self.playlistsresults.items(), key= lambda k: (-k[1].summary['duration'], k[1].summary['playlist'], -k[1].summary['A']))
 
 
