@@ -21,6 +21,7 @@ def runit(bdrom):
         bdrom.listBDMV()
         bdrom.specialBDMV()
         bdrom.scanBDMV()
+        bdrom.sortBDMV()
         return bdrom
 
 
@@ -155,27 +156,18 @@ class BDROM():
         return
 
     def sortBDMV(self):
-        # Find Main Title (Really it's "Guess Main Title")
-        
-        assert(self.playlistsresults)
-        def dsort(k):
-            if not k[1].playlistchapters: # Added as there may be a bug where VC-1 video. As evident in Empire Of The Sun 00010.mpls 
-                return ("0:00:00.000", 0)
-            else:
-                v1 = self.convertchaptersecs(timedelta(seconds=k[1].playlistchapters[-1]))
-                v2 = k[1].playlistchapters.__sizeof__()
-            return (v1, v2)
-         
-        # Two sorts because of stable sort properties for the sequential mpls file name.
-        self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key= lambda k:k[0]))
-        #self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key=dsort, reverse=True))
+        # TODO: Test to see if this still works with where VC-1 video bug. As evident in Empire Of The Sun 00010.mpls
+
+        # Sort the playlists and attempt to "guess the main title" which should go first.
+        #self.playlistsresults = OrderedDict(sorted(x.playlistsresults.items(), key= lambda k: k[1].summary['duration'], reverse=True))
+        self.playlistsresults = sorted(self.playlistsresults.items(), key= lambda k: (-k[1].summary['duration'], k[1].summary['playlist'], -k[1].summary['A']))
 
 
     def printBDMV(self, target=None):
         
         # TODO: Here 'target' only in case the future we can develop a use case where we only get info from specified playlist
         
-        for file, mpls in self.playlistsresults.items():
+        for file, mpls in self.playlistsresults:
             print("PLAYLIST: ", file)
             print("======================")
             print("FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t' + "DURATION")
