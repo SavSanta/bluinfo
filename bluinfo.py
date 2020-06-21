@@ -9,7 +9,7 @@ import ts_scanner as ScanTask
 from datetime import timedelta         # date and date conversions for logs
 from collections import OrderedDict
 
-__version__ = "0.6"
+__version__ = "0.7"
 __author__ = "SavSanta (Ru Uba)"
 sysplatform =  sys.platform     # For future bug testing on Windows
 
