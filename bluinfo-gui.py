@@ -20,14 +20,16 @@ class BluinfoApp(tkinter.Tk):
         global source_var
         filepath = filedialog.askdirectory()
         self.source_var.set(filepath)
+        self.button_scan.configure(state=ACTIVE)
         print(filepath)
 
     def scan_action(self):
-        # Allow user to select a directory and store it in global var
-        global source_var
-        filepath = filedialog.askdirectory()
-        self.source_var.set(filepath)
-        print(filepath)
+        # scan the bdmv
+        try:
+            self.bdrom = BDROM(source_var)
+        except:
+            pass
+            # error message box
 
     def selall_action(self):
         self.playlistbox.selection_set(playlistbox.get_children())
@@ -50,10 +52,13 @@ class BluinfoApp(tkinter.Tk):
         tkinter.Tk.__init__(self)
         
         # Program Version or Generica
-        #self.configure({'padx':10})
+        self.configure({'padx':10})
 
         # Set Window Title
         self.title("bluinfo.py {}".format(__version__))
+        
+        # BDROM object place holder.
+        self.bdrom = None
 
         # StringVar, IntVar, StringVar - Settings Window, TextVariable on entry
         self.intvar_filtersecs = tkinter.IntVar()
@@ -70,9 +75,9 @@ class BluinfoApp(tkinter.Tk):
         self.label_selectsource.pack(side=LEFT)
         self.entry_entrypath.pack(side=LEFT, expand=TRUE, fill=Y)
 
-        # Create the clickable buttons for slection and  pack to the right of the top frame
+        # Create the clickable buttons for selection and  pack to the right of the top frame
         self.button_browse = tkinter.Button(self.topframe, text="Browse", command=self.browse_action)
-        self.button_scan = tkinter.Button(self.topframe, text="Scan", command=self.scan_action)
+        self.button_scan = tkinter.Button(self.topframe, text="Scan", command=self.scan_action, state=DISABLED)
         self.button_scan.pack(side=RIGHT, padx=2)
         self.button_browse.pack(side=RIGHT, padx=2)
 
