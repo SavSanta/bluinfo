@@ -1,6 +1,5 @@
 from iso_639_2map import codecnamefunc, altcodecfunc, isolangfunc
 from ts_attrconst import StreamType, VideoFormat, FrameRate, ChannelLayout, SampleRate, AspectRate, AudioMode
-from bluinfo import BDROM
 from datetime import timedelta
 
 class Stream(object):
@@ -261,7 +260,24 @@ class MPLS(object):
             self.summary['2A'],
             self.summary['2V'],
             self.summary['PIP'],
-            BDROM.convertchaptersecs(timedelta(seconds=self.summary['duration']))))                 
+            MPLS.convertchaptersecs(timedelta(seconds=self.summary['duration']))))   
+
+    @staticmethod
+    def convertchaptersecs(secsdelta):
+        ''' Converts seconds into the human readable HH:MM:SS:MMM format.'''
+        assert isinstance(secsdelta, timedelta)
+        mm, ss = divmod(secsdelta.seconds, 60)
+        hh, mm = divmod(mm, 60)
+        humantime = "%d:%02d:%02d" % (hh, mm, ss)
+        if secsdelta.days:
+            def plural(n):
+                return n, abs(n) != 1 and "s" or ""
+            humantime = ("%d day%s, " % plural(secsdelta.days)) + humantime
+        if secsdelta.microseconds == 0: # modified timedelta to only precision output to three decimal places
+                humantime = humantime + '.000'
+        else:
+                humantime = humantime + ("%.3f" % (secsdelta.microseconds * .000001)).lstrip("0") 
+        return humantime
 
                 
     @property

@@ -185,19 +185,20 @@ class BDROM():
     
     @staticmethod
     def convertchaptersecs(secsdelta):
+        ''' Converts seconds into the human readable HH:MM:SS:MMM format.'''
         assert isinstance(secsdelta, timedelta)
         mm, ss = divmod(secsdelta.seconds, 60)
         hh, mm = divmod(mm, 60)
-        s = "%d:%02d:%02d" % (hh, mm, ss)
+        humantime = "%d:%02d:%02d" % (hh, mm, ss)
         if secsdelta.days:
             def plural(n):
                 return n, abs(n) != 1 and "s" or ""
-            s = ("%d day%s, " % plural(secsdelta.days)) + s
+            humantime = ("%d day%s, " % plural(secsdelta.days)) + humantime
         if secsdelta.microseconds == 0: # modified timedelta to only precision output to three decimal places
-                s = s + '.000'
+                humantime = humantime + '.000'
         else:
-                s = s + ("%.3f" % (secsdelta.microseconds * .000001)).lstrip("0") 
-        return s
+                humantime = humantime + ("%.3f" % (secsdelta.microseconds * .000001)).lstrip("0") 
+        return humantime
         
 
 
