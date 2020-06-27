@@ -17,16 +17,21 @@ class BluinfoApp(tkinter.Tk):
     
     def browse_action(self):
         # Allow user to select a directory and store it in global var
-        global source_var
         filepath = filedialog.askdirectory()
         self.source_var.set(filepath)
         self.button_scan.configure(state=ACTIVE)
         print(filepath)
 
     def scan_action(self):
-        # scan the bdmv
+        # scan the bdmv -- improve this
         try:
-            self.bdrom = BDROM(source_var)
+            self.bdrom = BDROM(self.source_var.get())
+            self.bdrom.checkBDMV()
+            self.bdrom.cryptBDMV()
+            self.bdrom.listBDMV()
+            self.bdrom.specialBDMV()
+            self.bdrom.scanBDMV()
+            self.bdrom.sortBDMV()
         except:
             pass
             # error message box
@@ -58,7 +63,7 @@ class BluinfoApp(tkinter.Tk):
         self.title("bluinfo.py {}".format(__version__))
         
         # BDROM object place holder.
-        self.bdrom = None
+        self.bdrom = False
 
         # StringVar, IntVar, StringVar - Settings Window, TextVariable on entry
         self.intvar_filtersecs = tkinter.IntVar()
