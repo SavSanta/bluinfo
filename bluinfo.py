@@ -182,7 +182,6 @@ class BDROM():
         contents = [x for x in os.listdir(dirpath) if x.endswith(ftype.lower()) or x.endswith(ftype.upper())]        # Think about making this a generator in the future for speed improvements.
         return contents 
 
-    
     @staticmethod
     def convertchaptersecs(secsdelta):
         ''' Converts seconds into the human readable HH:MM:SS:MMM format.'''
