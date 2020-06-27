@@ -36,6 +36,9 @@ class BluinfoApp(tkinter.Tk):
             pass
             # error message box
             
+    def populate_gui(self):
+        ''' Populate the BDROM information into the GUI '''
+        pass
 
     def selall_action(self):
         self.playlistbox.selection_set(playlistbox.get_children())
