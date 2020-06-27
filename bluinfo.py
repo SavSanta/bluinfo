@@ -157,8 +157,7 @@ class BDROM():
     def sortBDMV(self):
         # TODO: Test to see if this still works with where VC-1 video bug. As evident in Empire Of The Sun 00010.mpls
 
-        # Sort the playlists and attempt to "guess the main title" which should go first.
-        #self.playlistsresults = sorted(x.playlistsresults.items(), key= lambda k: k[1].summary['duration'], reverse=True)
+        # Sort the playlists and attempt to "guess the main title" which should be presented first
         self.playlistsresults = sorted(self.playlistsresults.items(), key= lambda k: (-k[1].summary['duration'], k[1].summary['playlist'], -k[1].summary['A']))
 
 
