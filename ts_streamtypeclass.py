@@ -1,5 +1,6 @@
 from iso_639_2map import codecnamefunc, altcodecfunc, isolangfunc
 from ts_attrconst import StreamType, VideoFormat, FrameRate, ChannelLayout, SampleRate, AspectRate, AudioMode
+from datetime import timedelta
 
 class Stream(object):
 

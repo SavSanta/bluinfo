@@ -379,7 +379,7 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                                         '2A' :streamcountsecondaryaudio,
                                         '2V': streamcountsecondaryvideo,
                                         'PIP': streamcountpip,
-                                        'duration': GenPlaylist.totallength
+                                        'duration': GenPlaylist.totallength,
                                         'hduration': ts_streamtypeclass.MPLS.convertchaptersecs(timedelta(seconds=GenPlaylist.totallength))
                                         }
                 
