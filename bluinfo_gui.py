@@ -24,21 +24,23 @@ class BluinfoApp(tkinter.Tk):
 
     def scan_action(self):
         # scan the bdmv -- improve this
-        try:
-            self.bdrom = BDROM(self.source_var.get())
-            self.bdrom.checkBDMV()
-            self.bdrom.cryptBDMV()
-            self.bdrom.listBDMV()
-            self.bdrom.specialBDMV()
-            self.bdrom.scanBDMV()
-            self.bdrom.sortBDMV()
-        except:
-            pass
-            # error message box
+        # ~ try:
+        self.bdrom = BDROM(self.source_var.get())
+        self.bdrom.checkBDMV()
+        self.bdrom.cryptBDMV()
+        self.bdrom.listBDMV()
+        self.bdrom.specialBDMV()
+        self.bdrom.scanBDMV()
+        self.bdrom.sortBDMV()
+        self.populate_playlistbox_gui()
+        # ~ except:
+            # ~ pass
+            # ~ # error message box
             
-    def populate_gui(self):
+    def populate_playlistbox_gui(self):
         ''' Populate the BDROM information into the GUI '''
-        pass
+        for i in range(0,len(self.bdrom.playlistsresults)):
+            self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[self.bdrom.playlistsresults[i][1].summary['playlist'], self.bdrom.playlistsresults[i][1].summary['hduration'], "NOT IMPLEMENTED"])
 
     def selall_action(self):
         self.playlistbox.selection_set(playlistbox.get_children())
@@ -202,18 +204,10 @@ class BluinfoApp(tkinter.Tk):
 # ~ #
 # ~ #  Generating  a few Treeview listbox entries. Testing scrolling and selections
 # ~ ##################
-
-# ~ for i in range(0,12):
-    # ~ playlistbox.insert("", END, text="FuntimeMovieTime", values=["000"+repr(i)+".m2ts", "0"+repr(i), "1:2"+repr(i)+":00", "4"+repr(i)+",542,421"])
-
-
-# ~ for i in range(0,7):
-    # ~ langbox.insert("", END, text="XXXTentacion", values=["French", "Francais", "192 kbps", "PushaMan"])
-    # ~ if i %2 == 0:
-        # ~ streambox.insert("", END, text="Even", values=["English", "English", "142 kbps", "PushaMan"])
-        # ~ langbox.insert("", END, text="XXXTentacion", values=["Bulgarian", "Bulgar", "256 kbps", "Savon"])
-    # ~ else:
-        # ~ streambox.insert("", END, text="Odd", values=["Spanish", "Castellano", "156 kbps", "Sicco Mode"])
+    
+# ~ # Playlist individual click details Loader 
+    # ~ streambox.insert("", END, text="StreamFiles", values=[self.bdrom.playlistsresults[i][1].summary['streamfile'], "NOT IMPLEMENTED" , "NOT IMPLEMENTED"])
+    # ~ langbox.insert("", END, text="Languages", values=["French", "Francais", "NOT IMPLEMENTED", "PushaMan"])
 
 
 # ~ ##################
