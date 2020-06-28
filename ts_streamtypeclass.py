@@ -1,6 +1,5 @@
 from iso_639_2map import codecnamefunc, altcodecfunc, isolangfunc
 from ts_attrconst import StreamType, VideoFormat, FrameRate, ChannelLayout, SampleRate, AspectRate, AudioMode
-from datetime import timedelta
 
 class Stream(object):
 
@@ -260,7 +259,7 @@ class MPLS(object):
             self.summary['2A'],
             self.summary['2V'],
             self.summary['PIP'],
-            MPLS.convertchaptersecs(timedelta(seconds=self.summary['duration']))))   
+            self.summary['hduration']))   
 
     @staticmethod
     def convertchaptersecs(secsdelta):

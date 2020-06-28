@@ -5,7 +5,8 @@ import os                                # Portability module
 import ts_streamtypeclass
 from ts_attrconst import StreamType
 from os.path import basename
-from iso_639_2map import isolangfunc         # Converting language codes ISO-639-2 
+from iso_639_2map import isolangfunc         # Converting language codes ISO-639-2
+from datetime import timedelta
 
 def clipfilescan(cpath,cliplists):
     clipfilescanresults = {}
@@ -379,6 +380,7 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                                         '2V': streamcountsecondaryvideo,
                                         'PIP': streamcountpip,
                                         'duration': GenPlaylist.totallength
+                                        'hduration': ts_streamtypeclass.MPLS.convertchaptersecs(timedelta(seconds=GenPlaylist.totallength))
                                         }
                 
                 print(GenPlaylist)
