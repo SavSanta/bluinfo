@@ -1,6 +1,6 @@
 #!/bin/env python3
 
-__version__ = 0.7
+__version__ = 0.8
 __author__ = "SavSanta (Ru Uba)"
 
 import tkinter
