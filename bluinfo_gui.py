@@ -53,13 +53,14 @@ class BluinfoApp(tkinter.Tk):
         # Get the target playlist
         target = self.playlistbox.item(sel_playlist_item, 'values')[0]
         
-        # streamclips for streambox
+        # clear the lower (streambox and langbox) of the GUI for "redrawing"
         self.clear_lower_gui()
         
+        # fill streambox with streamclip data
         for _, clip in enumerate(self.bdrom.playlistsresults[target].streamclips):
             self.streambox.insert("", END, text="StreamFiles", values=[clip.name, clip.length , "NOT IMPLEMENTED"])
         
-        # languages for languages
+        # fill langbox with langbox data
         for _, stream in self.bdrom.playlistsresults[target].playliststreams.items():
             self.langbox.insert("", END, text="lang", values=[stream.PID, "Codec Type", stream.languagename, stream.__str__()])
 
