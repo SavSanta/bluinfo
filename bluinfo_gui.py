@@ -38,9 +38,30 @@ class BluinfoApp(tkinter.Tk):
             # ~ # error message box
             
     def populate_playlistbox_gui(self):
-        ''' Populate the BDROM information into the GUI '''
-        for i in range(0,len(self.bdrom.playlistsresults)):
-            self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[self.bdrom.playlistsresults[i][1].summary['playlist'], self.bdrom.playlistsresults[i][1].summary['hduration'], "NOT IMPLEMENTED"])
+        ''' Populate the BDROM information into the playlistbox GUI '''
+        for k, v in self.bdrom.playlistsresults.items():
+            self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[v.summary['playlist'], v.summary['hduration'], "NOT IMPLEMENTED"])
+
+    def clear_lower_gui(self):
+        self.streambox.delete(*self.streambox.get_children())
+        self.langbox.delete(*self.langbox.get_children())
+
+    def populate_lower_gui(self, event):
+        # Grab the current selection in the list.
+        sel_playlist_item = self.playlistbox.selection()
+        
+        # Get the target playlist
+        target = self.playlistbox.item(sel_playlist_item, 'values')[0]
+        
+        # streamclips for streambox
+        self.clear_lower_gui()
+        
+        for _, clip in enumerate(self.bdrom.playlistsresults[target].streamclips):
+            self.streambox.insert("", END, text="StreamFiles", values=[clip.name, clip.length , "NOT IMPLEMENTED"])
+        
+        # languages for languages
+        for _, stream in self.bdrom.playlistsresults[target].playliststreams.items():
+            self.langbox.insert("", END, text="lang", values=[stream.PID, "Codec Type", stream.languagename, stream.__str__()])
 
     def selall_action(self):
         self.playlistbox.selection_set(playlistbox.get_children())
@@ -127,7 +148,12 @@ class BluinfoApp(tkinter.Tk):
         # See also treeview_multicolumn.py
         # Also https://groups.google.com/forum/#!topic/comp.lang.tcl/VwG4_7-1538
         self.playlist_col = [ "Playlist", "Length", "Size" ]
-        self.playlistbox = ttk.Treeview(self.three, show="headings", columns=self.playlist_col, selectmode=EXTENDED, height=7)
+        self.playlistbox = ttk.Treeview(self.three, show="headings", columns=self.playlist_col, selectmode=BROWSE, height=7)
+        
+        # Bind double-click/single-click/up/down events to populate streamfile and codecs function.
+        self.playlistbox.bind("<ButtonRelease-1>", self.populate_lower_gui)
+        self.playlistbox.bind("<KeyRelease-Up>", self.populate_lower_gui)
+        self.playlistbox.bind("<KeyRelease-Down>", self.populate_lower_gui)
 
         # Add appropriate headings text to each column.
         self.fill_header(self.playlist_col, self.playlistbox)
@@ -148,7 +174,7 @@ class BluinfoApp(tkinter.Tk):
         self.five.pack(side=TOP, fill=X, pady=1)
 
         # Add TTK Treeview with no tree to the fifth frame.
-        self.langbox_col = [ "Codec", "Language", "Bitrate", "Description" ]
+        self.langbox_col = [ "PID", "Codec", "Language", "Description" ]
         self.langbox = ttk.Treeview(self.five, show="headings", columns=self.langbox_col, selectmode=NONE, height=7)
 
         #  Add appropriate headings text to each column.
@@ -170,7 +196,6 @@ class BluinfoApp(tkinter.Tk):
         self.three_scroll.pack(side=RIGHT, fill=Y)
         self.four_scroll.pack(side=RIGHT, fill=Y)
         self.five_scroll.pack(side=RIGHT, fill=Y)
-
 
         # Add sixth level frame for containing  culled  final informational textbox widget
         self.six = tkinter.Frame(self)
@@ -196,19 +221,6 @@ class BluinfoApp(tkinter.Tk):
         # Add a settings button
         self.button_settings = tkinter.Button(self.seven, text="Settings", command=self.sett_open)
         self.button_settings.pack(side=RIGHT)
-
-
-# ~ ##################
-# ~ #
-# ~ #  Live Testing Debug
-# ~ #
-# ~ #  Generating  a few Treeview listbox entries. Testing scrolling and selections
-# ~ ##################
-    
-# ~ # Playlist individual click details Loader 
-    # ~ streambox.insert("", END, text="StreamFiles", values=[self.bdrom.playlistsresults[i][1].summary['streamfile'], "NOT IMPLEMENTED" , "NOT IMPLEMENTED"])
-    # ~ langbox.insert("", END, text="Languages", values=["French", "Francais", "NOT IMPLEMENTED", "PushaMan"])
-
 
 # ~ ##################
 # ~ #
