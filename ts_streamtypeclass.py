@@ -19,7 +19,6 @@ class Stream(object):
         self.payloadbytes = 0
         self.packetcount = 0
         self.packetseconds = 0
-        self.angleindex = 0
         self.packetsize = 0
         self.languagename = None
 
@@ -38,7 +37,7 @@ class TSVideoStream(Stream):
        self.framerate = "--UNKNOWN--"
        self.isInterlaced = "--UNKNOWN--"
        self.isVideo = True
-       
+       self.angleindex = 0
 
     def convertvidformat(self):
         
@@ -199,10 +198,9 @@ class TSAudioStream(Stream):
         return "AudioStream | PID: {}, Language Code: {}, Language Name: {}, Alt Codec: {}, Description {} ".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.desc)
 
 
-
-
 class TSTextStream(Stream):
     def __init__(self):
+        super().__init__()
         self.isVBR = True
         self.isInitialized = True
         self.isText = True
@@ -216,6 +214,7 @@ class TSTextStream(Stream):
 
 class TSGraphicsStream(Stream):
     def __init__(self):
+        super().__init__()
         self.isVBR = True
         self.isInitialized = True
         self.isGraphic = True
