@@ -57,10 +57,10 @@ class BluinfoApp(tkinter.Tk):
         self.langbox.delete(*self.langbox.get_children())
 
     def populate_lower_gui(self, event):
-        # Grab the current selection in the list.
+        # Grab the current selection in the playlisbox (changes based on click/arrow events).
         sel_playlist_item = self.playlistbox.selection()
         
-        # Get the target playlist
+        # Get the targeted playlist filename
         target = self.playlistbox.item(sel_playlist_item, 'values')[0]
         
         # clear the lower (streambox and langbox) of the GUI for "redrawing"
