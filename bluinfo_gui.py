@@ -19,7 +19,6 @@ class BluinfoApp(tkinter.Tk):
         filepath = filedialog.askdirectory()
         self.source_var.set(filepath)
         self.button_scan.configure(state=ACTIVE)
-        print(filepath)
 
     def scan_action(self):
         # scan the bdmv -- improve this
