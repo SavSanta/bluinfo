@@ -10,6 +10,7 @@ from datetime import timedelta
 from iso_639_2map import codecnamefunc, isolangfunc
 from tkinter.constants import *
 
+TEST = 10
 
 class BluinfoApp(tkinter.Tk):
 
@@ -28,19 +29,31 @@ class BluinfoApp(tkinter.Tk):
         # scan the bdmv -- improve this
         # ~ try:
         self.bdrom = BDROM(self.source_var.get())
+        self.incr_progress(10)
         self.bdrom.checkBDMV()
+        self.incr_progress(20)
         self.bdrom.cryptBDMV()
+        self.incr_progress(30)
         self.bdrom.listBDMV()
+        self.incr_progress(40)
         self.bdrom.specialBDMV()
+        self.incr_progress(50)
         self.bdrom.scanBDMV()
+        self.incr_progress(60)
         self.bdrom.sortBDMV()
+        self.incr_progress(75)
         self.populate_playlistbox_gui()
+        self.incr_progress(100)
+        self.incr_progress(0)
+
         # ~ except:
             # ~ pass
             # ~ # error message box
             
     def populate_playlistbox_gui(self):
         ''' Populate the BDROM information into the playlistbox GUI '''
+        import time
+        time.sleep(1)
         for k, v in self.bdrom.playlistsresults.items():
             self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[v.summary['playlist'], v.summary['hduration'], "NOT IMPLEMENTED"])
 
@@ -77,6 +90,10 @@ class BluinfoApp(tkinter.Tk):
         w_sett.title("Settings")
         cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=intvar_filtersecs).pack(anchor=W)
         cbox_filterloops = tkinter.Checkbutton(w_sett, text="Filter Out Playlists that Loop", variable=intvar_filterloops).pack(anchor=W)
+
+    def incr_progress(self, amount):
+        self.seven_progress['value'] = amount
+        self.update_idletasks()
 
     def fill_header(self, col, listcol):
         ''' Add GUI column headings to for each section. '''
@@ -218,7 +235,7 @@ class BluinfoApp(tkinter.Tk):
         self.seven.pack(side=TOP, fill=X, pady=1)
 
         # Add a progressbar to the program and make sure it is about 45% full!
-        self.seven_progress = ttk.Progressbar(self.seven, orient=HORIZONTAL, mode="determinate", value=45)
+        self.seven_progress = ttk.Progressbar(self.seven, orient=HORIZONTAL, mode="determinate", value=0)
         self.seven_progress.pack(side=LEFT, fill=X, expand=TRUE)
 
         # Add a settings button
