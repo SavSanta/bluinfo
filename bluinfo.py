@@ -165,9 +165,9 @@ class BDROM():
         
         # TODO: Here 'target' only in case the future we can develop a use case where we only get info from specified playlist
 
+        buffer = ""
         for file, mpls in self.playlistsresults.items():
-            buffer = ""
-            buffer += "PLAYLIST: {} \n".format(file)
+            buffer += "\nPLAYLIST: {} \n".format(file)
             buffer += "====================== \n"
             buffer += "FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t\t' + "DURATION \n"
             for index in range(0, len(mpls.chapterclips)):
@@ -176,7 +176,8 @@ class BDROM():
                         self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)),
                         self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimeout)),
                         self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].length)))
-            print(buffer)
+        print(buffer)
+        return buffer
 
     @staticmethod
     def listloader(dirpath, ftype):
