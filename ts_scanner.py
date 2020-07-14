@@ -201,7 +201,6 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                 elif (streamtype == StreamType.SUBTITLE):
 
                     stream = ts_streamtypeclass.TSTextStream()
-                    #char_code =readbyte(data,pos)   #Scala implemenation has this but really appears unnecessary
                     languagecode = readbyte(data, pos, 3)
                     stream.languagecode = languagecode
                     
@@ -300,16 +299,18 @@ def playlistscan(ppath, playlists, cliplists, streamlists):
                         pass
                 timeout = outtime / 45000 # Should I float()?
 
+                lspath = ppath.replace("PLAYLIST", "STREAM") + streamfilename
                 streamClip = ts_streamtypeclass.StreamClip()
-                streamClip.streamfilename = streeeemFile
-                streamClip.streamclipfile = streeeemClipFile
+                streamClip.streamfilename = streeeemFile              # When refactoring see if able to remove as i still think it's cruft
+                streamClip.streamclipfile = streeeemClipFile          # When refactoring see if able to remove as I still think it's cruft
                 streamClip.name = streamfilename
                 streamClip.timein = timein
                 streamClip.timeout = timeout
                 streamClip.length = timeout - timein
                 streamClip.relativetimein = GenPlaylist.totallength     
                 streamClip.relativetimeout = streamClip.relativetimein + streamClip.length
-
+                streamClip.bytesize = os.lstat(lspath).st_size
+ 
                 # GenPlaylist needs a better name
                 GenPlaylist.streamclips.append(streamClip)
                 GenPlaylist.chapterclips.append(streamClip)

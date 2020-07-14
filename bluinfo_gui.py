@@ -7,10 +7,9 @@ import tkinter
 from tkinter import ttk, filedialog
 from bluinfo import BDROM
 from datetime import timedelta
+from time import sleep
 from iso_639_2map import codecnamefunc, isolangfunc
 from tkinter.constants import *
-
-TEST = 10
 
 class BluinfoApp(tkinter.Tk):
 
@@ -52,8 +51,7 @@ class BluinfoApp(tkinter.Tk):
             
     def populate_playlistbox_gui(self):
         ''' Populate the BDROM information into the playlistbox GUI '''
-        import time
-        time.sleep(1)
+        sleep(1)
         for k, v in self.bdrom.playlistsresults.items():
             self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[v.summary['playlist'], v.summary['hduration'], "NOT IMPLEMENTED"])
 
@@ -73,7 +71,7 @@ class BluinfoApp(tkinter.Tk):
         
         # fill streambox with streamclip data
         for _, clip in enumerate(self.bdrom.playlistsresults[target].streamclips):
-            self.streambox.insert("", END, text="StreamFiles", values=[clip.name, BDROM.convertchaptersecs(timedelta(seconds=clip.length)), "NOT IMPLEMENTED"])
+            self.streambox.insert("", END, text="StreamFiles", values=[clip.name, BDROM.convertchaptersecs(timedelta(seconds=clip.length)), "{:,}".format(clip.bytesize)])
         
         # fill langbox with langbox data
         for _, stream in self.bdrom.playlistsresults[target].playliststreams.items():
