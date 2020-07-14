@@ -18,7 +18,11 @@ class BluinfoApp(tkinter.Tk):
         # Allow user to select a directory and store it in global var
         filepath = filedialog.askdirectory()
         self.source_var.set(filepath)
-        self.button_scan.configure(state=ACTIVE)
+
+        if filepath:
+            self.button_scan.configure(state=ACTIVE)
+        else:
+            self.button_scan.configure(state=DISABLED)
 
     def scan_action(self):
         # scan the bdmv -- improve this
