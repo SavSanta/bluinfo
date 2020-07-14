@@ -167,10 +167,12 @@ class BDROM():
 
         buffer = ""
         for file, mpls in self.playlistsresults.items():
-            buffer += "\nPLAYLIST: {} \n".format(file)
-            buffer += "====================== \n"
-            buffer += "FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t\t' + "DURATION \n"
             for index in range(0, len(mpls.chapterclips)):
+                if (mpls.chapterclips[index].length < 10) and (filterlist == True):
+                    continue
+                buffer += "\nPLAYLIST: {} \n".format(file)
+                buffer += "====================== \n"
+                buffer += "FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t\t' + "DURATION \n"
                 buffer += "{0} \t {1} \t {2} \t {3} \n".format(
                         mpls.chapterclips[index].name,
                         self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)),
