@@ -1,11 +1,8 @@
 #!/bin/env python3
 
-__version__ = 0.8
-__author__ = "SavSanta (Ru Uba)"
-
 import tkinter
 from tkinter import ttk, filedialog
-from bluinfo import BDROM
+from bluinfo import BDROM, __version__, __author__
 from datetime import timedelta
 from time import sleep
 from iso_639_2map import codecnamefunc, isolangfunc

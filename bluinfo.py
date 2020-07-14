@@ -8,7 +8,7 @@ import tkinter                   # For the GUI that some will say is undoubtedbl
 import ts_scanner as ScanTask
 from datetime import timedelta         # date and date conversions for logs
 
-__version__ = "0.7"
+__version__ = "0.9"
 __author__ = "SavSanta (Ru Uba)"
 sysplatform =  sys.platform     # For future bug testing on Windows
 
