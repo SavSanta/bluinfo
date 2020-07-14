@@ -161,17 +161,22 @@ class BDROM():
         self.playlistsresults = dict(sorted(self.playlistsresults.items(), key= lambda k: (-k[1].summary['duration'], k[1].summary['playlist'], -k[1].summary['A'])))
 
 
-    def printBDMV(self, target=None):
+    def printBDMV(self, filterlist=False, target=None):
         
         # TODO: Here 'target' only in case the future we can develop a use case where we only get info from specified playlist
-        
-        for file, mpls in self.playlistsresults:
-            print("PLAYLIST: ", file)
-            print("======================")
-            print("FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t\t' + "DURATION")
+
+        for file, mpls in self.playlistsresults.items():
+            buffer = ""
+            buffer += "PLAYLIST: {} \n".format(file)
+            buffer += "====================== \n"
+            buffer += "FILE" + '\t\t' + "START TIME" + '\t' + "END TIME" + '\t\t' + "DURATION \n"
             for index in range(0, len(mpls.chapterclips)):
-                print(mpls.chapterclips[index].name + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimeout)) + '\t' + self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].length)))
-            print()
+                buffer += "{0} \t {1} \t {2} \t {3} \n".format(
+                        mpls.chapterclips[index].name,
+                        self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimein)),
+                        self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].relativetimeout)),
+                        self.convertchaptersecs(timedelta(seconds=mpls.chapterclips[index].length)))
+            print(buffer)
 
     @staticmethod
     def listloader(dirpath, ftype):
