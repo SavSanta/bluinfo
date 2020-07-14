@@ -165,7 +165,7 @@ class TSAudioStream(Stream):
 
     @property
     def desc(self):
-        description = self.channeldesc()   # Wary of recusions
+        description = self.channeldesc()
 
         if self.samplerate > 0:
             description += " / {0} kHz".format((self.samplerate / 1000))
@@ -192,7 +192,7 @@ class TSAudioStream(Stream):
         return description
 
     def __str__(self):
-        return "PID: {}, Language Code: {}, Language Name: {}, Alt Codec: {}, Channels: {}, Description {} ".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc, self.desc)
+        return "PID: {}, Language Code: {}, Language Name: {}, Alt Codec: {}, Channels: {}, Description {} ".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.channeldesc(), self.desc)
 
     def __repr__(self):
         return "AudioStream | PID: {}, Language Code: {}, Language Name: {}, Alt Codec: {}, Description {} ".format(self.PID, self.languagecode, isolangfunc(self.languagecode), altcodecfunc(self.streamtype), self.desc)
