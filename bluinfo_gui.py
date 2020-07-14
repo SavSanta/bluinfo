@@ -24,21 +24,22 @@ class BluinfoApp(tkinter.Tk):
         # scan the bdmv -- improve this
         # ~ try:
         self.bdrom = BDROM(self.source_var.get())
-        self.incr_progress(10)
-        self.bdrom.checkBDMV()
         self.incr_progress(20)
-        self.bdrom.cryptBDMV()
+        self.bdrom.checkBDMV()
         self.incr_progress(30)
-        self.bdrom.listBDMV()
+        self.bdrom.cryptBDMV()
         self.incr_progress(40)
-        self.bdrom.specialBDMV()
+        self.bdrom.listBDMV()
         self.incr_progress(50)
-        self.bdrom.scanBDMV()
+        self.bdrom.specialBDMV()
         self.incr_progress(60)
+        self.bdrom.scanBDMV()
+        self.incr_progress(70)
         self.bdrom.sortBDMV()
-        self.incr_progress(75)
+        self.incr_progress(85)
         self.populate_playlistbox_gui()
-        self.incr_progress(100)
+        self.incr_progress(98)
+        self.populate_textbox_gui()
         self.incr_progress(0)
 
         # ~ except:
@@ -51,11 +52,11 @@ class BluinfoApp(tkinter.Tk):
         for k, v in self.bdrom.playlistsresults.items():
             self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[v.summary['playlist'], v.summary['hduration']])
 
-    def clear_lower_gui(self):
+    def clear_stream_lang_gui(self):
         self.streambox.delete(*self.streambox.get_children())
         self.langbox.delete(*self.langbox.get_children())
 
-    def populate_lower_gui(self, event):
+    def populate_stream_lang_gui(self, event):
         # Grab the current selection in the playlisbox (changes based on click/arrow events).
         sel_playlist_item = self.playlistbox.selection()
         
@@ -63,7 +64,7 @@ class BluinfoApp(tkinter.Tk):
         target = self.playlistbox.item(sel_playlist_item, 'values')[0]
         
         # clear the lower (streambox and langbox) of the GUI for "redrawing"
-        self.clear_lower_gui()
+        self.clear_stream_lang_gui()
         
         # fill streambox with streamclip data
         for _, clip in enumerate(self.bdrom.playlistsresults[target].streamclips):
@@ -72,6 +73,12 @@ class BluinfoApp(tkinter.Tk):
         # fill langbox with langbox data
         for _, stream in self.bdrom.playlistsresults[target].playliststreams.items():
             self.langbox.insert("", END, text="lang", values=[stream.PID, codecnamefunc(stream.streamtype), isolangfunc(stream.languagecode), stream.__str__()])
+
+    def populate_textbox_gui(self):
+        textdata = self.bdrom.printBDMV()
+        self.info_text.config(state=NORMAL)
+        self.info_text.insert(END, textdata)
+        self.info_text.config(state=DISABLED)
 
     def selall_action(self):
         self.playlistbox.selection_set(playlistbox.get_children())
@@ -165,9 +172,9 @@ class BluinfoApp(tkinter.Tk):
         self.playlistbox = ttk.Treeview(self.three, show="headings", columns=self.playlist_col, selectmode=BROWSE, height=7)
         
         # Bind double-click/single-click/up/down events to populate streamfile and codecs function.
-        self.playlistbox.bind("<ButtonRelease-1>", self.populate_lower_gui)
-        self.playlistbox.bind("<KeyRelease-Up>", self.populate_lower_gui)
-        self.playlistbox.bind("<KeyRelease-Down>", self.populate_lower_gui)
+        self.playlistbox.bind("<ButtonRelease-1>", self.populate_stream_lang_gui)
+        self.playlistbox.bind("<KeyRelease-Up>", self.populate_stream_lang_gui)
+        self.playlistbox.bind("<KeyRelease-Down>", self.populate_stream_lang_gui)
 
         # Add appropriate headings text to each column.
         self.fill_header(self.playlist_col, self.playlistbox)
@@ -185,11 +192,15 @@ class BluinfoApp(tkinter.Tk):
 
         # Add fifth level frame for containing playlist listbox widgets
         self.five = tkinter.Frame(self)
-        self.five.pack(side=TOP, fill=X, pady=1)
+        self.five.pack(side=TOP, fill=X , pady=1)
 
         # Add TTK Treeview with no tree to the fifth frame.
         self.langbox_col = [ "PID", "Codec", "Language", "Description" ]
         self.langbox = ttk.Treeview(self.five, show="headings", columns=self.langbox_col, selectmode=NONE, height=7)
+        self.langbox.column("PID", width=10)
+        self.langbox.column("Codec", width=10)
+        self.langbox.column("Language", width=10)
+        self.langbox.column("Description", width=60)
 
         #  Add appropriate headings text to each column.
         self.fill_header(self.langbox_col, self.langbox)
@@ -211,7 +222,7 @@ class BluinfoApp(tkinter.Tk):
         self.four_scroll.pack(side=RIGHT, fill=Y)
         self.five_scroll.pack(side=RIGHT, fill=Y)
 
-        # Add sixth level frame for containing  culled  final informational textbox widget
+        # Add sixth level frame for containing culled final informational textbox widget
         self.six = tkinter.Frame(self)
         self.six.pack(side=TOP, fill=X, pady=1)
 
@@ -236,17 +247,6 @@ class BluinfoApp(tkinter.Tk):
         self.button_settings = tkinter.Button(self.seven, text="Settings", command=self.sett_open)
         self.button_settings.pack(side=RIGHT)
 
-# ~ ##################
-# ~ #
-# ~ #  Live Testing Debug
-# ~ #
-# ~ #  Generating Lorem Ipsum Data for textbox
-# ~ ##################
-
-# ~ lorem="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod ornare convallis. Sed sit amet nisi sem. Integer commodo tincidunt lectus ut cursus. Phasellus at sollicitudin massa. Phasellus scelerisque consequat nibh non finibus. Vestibulum dolor sapien, faucibus et finibus quis, placerat in lacus. Aliquam semper, ligula faucibus dapibus accumsan, tellus urna sagittis eros, a aliquam urna magna sed sapien. \n Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras eleifend enim sit amet neque mollis, eu dapibus felis hendrerit. Pellentesque at interdum libero, quis efficitur augue. Nam enim enim, porta eget porta sit amet, tristique non nulla. Nam ac blandit risus, vel consectetur neque. Sed in congue odio. Duis iaculis efficitur mauris, eu eleifend libero pellentesque non. Pellentesque ut justo semper, rhoncus odio vitae, commodo tortor. Nullam sed enim massa. Donec eget luctus nibh, ut venenatis nunc. Donec volutpat, dolor eget mattis congue, lacus mi commodo lacus, in accumsan massa nisi vitae odio. Quisque non tempor nulla. Fusce iaculis, magna vel ornare condimentum, orci erat mattis orci, vitae tincidunt leo felis id magna. Integer in pretium velit, ut vulputate nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur ut sem condimentum, condimentum nisi nec, facilisis velit."
-# ~ info_text.config(state=NORMAL)
-# ~ info_text.insert(END, lorem)
-# ~ info_text.config(state=DISABLED)
 
 
 if __name__ == '__main__':

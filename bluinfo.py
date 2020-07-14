@@ -168,7 +168,7 @@ class BDROM():
         buffer = ""
         for file, mpls in self.playlistsresults.items():
             for index in range(0, len(mpls.chapterclips)):
-                if (mpls.chapterclips[index].length < 10) and (filterlist == True):
+                if (mpls.chapterclips[index].length < 20) and (filterlist == True):
                     continue
                 buffer += "\nPLAYLIST: {} \n".format(file)
                 buffer += "====================== \n"
