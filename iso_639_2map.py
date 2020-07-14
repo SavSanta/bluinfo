@@ -523,7 +523,7 @@ def codecnamefunc(threecode, kicker=666):
         else:
             return "DTS Audio"
     else:
-        return codenamedict[threecode]
+        return codecnamedict[threecode]
 
 
 def altcodecfunc(threecode):

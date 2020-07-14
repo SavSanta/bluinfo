@@ -20,7 +20,7 @@ class Stream(object):
         self.packetcount = 0
         self.packetseconds = 0
         self.packetsize = 0
-        self.languagename = None
+        self.languagecode = None
 
 
 class TSVideoStream(Stream):

@@ -6,6 +6,8 @@ __author__ = "SavSanta (Ru Uba)"
 import tkinter
 from tkinter import ttk, filedialog
 from bluinfo import BDROM
+from datetime import timedelta
+from iso_639_2map import codecnamefunc, isolangfunc
 from tkinter.constants import *
 
 
@@ -58,19 +60,19 @@ class BluinfoApp(tkinter.Tk):
         
         # fill streambox with streamclip data
         for _, clip in enumerate(self.bdrom.playlistsresults[target].streamclips):
-            self.streambox.insert("", END, text="StreamFiles", values=[clip.name, clip.length , "NOT IMPLEMENTED"])
+            self.streambox.insert("", END, text="StreamFiles", values=[clip.name, BDROM.convertchaptersecs(timedelta(seconds=clip.length)), "NOT IMPLEMENTED"])
         
         # fill langbox with langbox data
         for _, stream in self.bdrom.playlistsresults[target].playliststreams.items():
-            self.langbox.insert("", END, text="lang", values=[stream.PID, "Codec Type", stream.languagename, stream.__str__()])
+            self.langbox.insert("", END, text="lang", values=[stream.PID, codecnamefunc(stream.streamtype), isolangfunc(stream.languagecode), stream.__str__()])
 
     def selall_action(self):
         self.playlistbox.selection_set(playlistbox.get_children())
 
-    def selnone_action():
+    def selnone_action(self):
         self.playlistbox.selection_remove(playlistbox.get_children())
 
-    def sett_open():
+    def sett_open(self):
         w_sett = tkinter.Toplevel(pady=10)
         w_sett.title("Settings")
         cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=intvar_filtersecs).pack(anchor=W)
