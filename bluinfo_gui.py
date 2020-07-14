@@ -53,7 +53,7 @@ class BluinfoApp(tkinter.Tk):
         ''' Populate the BDROM information into the playlistbox GUI '''
         sleep(1)
         for k, v in self.bdrom.playlistsresults.items():
-            self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[v.summary['playlist'], v.summary['hduration'], "NOT IMPLEMENTED"])
+            self.playlistbox.insert("", END, text="FuntimeMovieTime", values=[v.summary['playlist'], v.summary['hduration']])
 
     def clear_lower_gui(self):
         self.streambox.delete(*self.streambox.get_children())
@@ -165,7 +165,7 @@ class BluinfoApp(tkinter.Tk):
         # May need to implement checkbox style someone made here https://github.com/RedFantom/s/blob/master/s/checkboxtreeview.py
         # See also treeview_multicolumn.py
         # Also https://groups.google.com/forum/#!topic/comp.lang.tcl/VwG4_7-1538
-        self.playlist_col = [ "Playlist", "Length", "Size" ]
+        self.playlist_col = [ "Playlist", "Length"]
         self.playlistbox = ttk.Treeview(self.three, show="headings", columns=self.playlist_col, selectmode=BROWSE, height=7)
         
         # Bind double-click/single-click/up/down events to populate streamfile and codecs function.
@@ -181,7 +181,7 @@ class BluinfoApp(tkinter.Tk):
         self.four.pack(side=TOP, fill=X, pady=1)
 
         # Add TTK Treeview with no tree to the third frame.
-        self.streambox_col = [ "Stream File", "Length", "Size" ]
+        self.streambox_col = [ "Stream File", "Length", "Size (in bytes)" ]
         self.streambox = ttk.Treeview(self.four, show="headings", columns=self.streambox_col, selectmode=NONE, height=5)
 
         # Add appropriate headings text to each column.
