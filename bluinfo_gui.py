@@ -86,8 +86,8 @@ class BluinfoApp(tkinter.Tk):
     def sett_open(self):
         w_sett = tkinter.Toplevel(pady=10)
         w_sett.title("Settings")
-        cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=intvar_filtersecs).pack(anchor=W)
-        cbox_filterloops = tkinter.Checkbutton(w_sett, text="Filter Out Playlists that Loop", variable=intvar_filterloops).pack(anchor=W)
+        cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=self.intvar_filtersecs).pack(anchor=W)
+        cbox_filterloops = tkinter.Checkbutton(w_sett, text="Filter Out Playlists that Loop", variable=self.intvar_filterloops).pack(anchor=W)
 
     def incr_progress(self, amount):
         self.seven_progress['value'] = amount
