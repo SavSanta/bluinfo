@@ -96,6 +96,10 @@ class BluinfoApp(tkinter.Tk):
         cbox_filtersecs = tkinter.Checkbutton(w_sett, text="Filter Out Playlists Under 20 seconds", variable=self.intvar_filtersecs).pack(anchor=W)
         cbox_filterloops = tkinter.Checkbutton(w_sett, text="Filter Out Playlists that Loop", variable=self.intvar_filterloops).pack(anchor=W)
 
+    def about_open(self):
+        ''' Open an About detail windo '''
+        pass
+
     def incr_progress(self, amount):
         self.seven_progress['value'] = amount
         self.update_idletasks()
@@ -134,7 +138,7 @@ class BluinfoApp(tkinter.Tk):
         self.entry_entrypath.pack(side=LEFT, expand=TRUE, fill=Y)
 
         # Create the clickable buttons for selection and  pack to the right of the top frame
-        self.button_browse = tkinter.Button(self.topframe, text="Browse", command=self.browse_action)
+        self.button_browse = tkinter.Button(self.topframe, text="Settings", command=self.browse_action)
         self.button_scan = tkinter.Button(self.topframe, text="Scan", command=self.scan_action, state=DISABLED)
         self.button_scan.pack(side=RIGHT, padx=2)
         self.button_browse.pack(side=RIGHT, padx=2)
@@ -154,15 +158,15 @@ class BluinfoApp(tkinter.Tk):
         self.two.pack(side=TOP, fill=X)
 
         # Pack playlist  label and buttons and pack to the left in order
-        self.label_selectplaylist = tkinter.Label(self.two, text="Select Playlist(s):")
-        self.button_selall = tkinter.Button(self.two, text="Select All", command=self.selall_action)
-        self.button_selnone = tkinter.Button(self.two, text="Select None", command=self.selnone_action)
-        self.button_selcustom = tkinter.Button(self.two, text="Custom", command=FALSE)
+        self.label_selectplaylist = tkinter.Label(self.two, text="")
+        self.button_selall = tkinter.Button(self.two, text="BDMV Properties", state=DISABLED, command=FALSE)
+        self.button_selnone = tkinter.Button(self.two, text="Settings", command=self.sett_open)
+        #self.button_selcustom = tkinter.Button(self.two, text="Custom", command=FALSE)
 
         self.label_selectplaylist.pack(side=LEFT, padx=2)
         self.button_selall.pack(side=LEFT, padx=2)
         self.button_selnone.pack(side=LEFT, padx=2)
-        self.button_selcustom.pack(side=LEFT, padx=2)
+        #self.button_selcustom.pack(side=LEFT, padx=2)
 
         # Add third level frame for containing playlist listbox widgets
         self.three = tkinter.Frame(self)
@@ -248,11 +252,11 @@ class BluinfoApp(tkinter.Tk):
         self.seven_progress.pack(side=LEFT, fill=X, expand=TRUE)
 
         # Add a settings button
-        self.button_settings = tkinter.Button(self.seven, text="Settings", command=self.sett_open)
+        self.button_settings = tkinter.Button(self.seven, text="About", command=self.about_open)
         self.button_settings.pack(side=RIGHT)
 
 
 
 if __name__ == '__main__':
-    test = BluinfoApp()
-    test.mainloop()
+    app = BluinfoApp()
+    app.mainloop()
