@@ -138,7 +138,7 @@ class BluinfoApp(tkinter.Tk):
         self.entry_entrypath.pack(side=LEFT, expand=TRUE, fill=Y)
 
         # Create the clickable buttons for selection and  pack to the right of the top frame
-        self.button_browse = tkinter.Button(self.topframe, text="Settings", command=self.browse_action)
+        self.button_browse = tkinter.Button(self.topframe, text="Browse", command=self.browse_action)
         self.button_scan = tkinter.Button(self.topframe, text="Scan", command=self.scan_action, state=DISABLED)
         self.button_scan.pack(side=RIGHT, padx=2)
         self.button_browse.pack(side=RIGHT, padx=2)
