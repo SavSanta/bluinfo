@@ -1,9 +1,9 @@
 # bluinfo
 
 
-Cross-platform (ie run on Linux, Macintosh, or Windows) tool to extract and view basic Bluray/BDMV disc info and metadata. 
+Cross-platform (ie run on Linux, Macintosh, or Windows) tool to extract and display basic Bluray/BDMV disc info and metadata. 
 
-Modeled after bdinfo code.
+(Modeled heavily after UniqSquid's bdinfo code)
 
 Requirements:
 Python 3.0 and Tkinter
