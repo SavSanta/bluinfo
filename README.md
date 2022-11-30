@@ -10,7 +10,7 @@ Python 3.0 and Tkinter
 
 PRs welcome
 
-## Steps to utiliz
+## Steps to utilize
 
 ![Base](https://user-images.githubusercontent.com/21159693/88212596-8080c380-cc25-11ea-8db5-d0fc0eee67ad.png)
 Launch `python3 bluinfo_gui.py`.
